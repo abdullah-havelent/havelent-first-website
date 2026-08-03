@@ -10,7 +10,7 @@ export default function ClientRoot({
 }: {
   children: React.ReactNode;
 }) {
-  const [ready, setReady] = useState(false);
+const [ready, setReady] = useState(false);
 
   useEffect(() => {
     // Mobile → Skip intro

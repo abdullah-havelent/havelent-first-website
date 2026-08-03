@@ -216,3 +216,23 @@ body::before {
 
   mix-blend-mode: overlay;
 }
+
+
+
+
+@keyframes logoFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.logo-intro {
+  opacity: 0;
+  animation: logoFadeIn 0.5s ease-out 0.5s forwards;
+}
