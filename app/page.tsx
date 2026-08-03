@@ -1,7 +1,5 @@
 'use client';
 
-
-import IntroProvider from "@/components/IntroProvider";
 import Hero from '@/components/Hero';
 import Services from '@/components/Services';
 import About from '@/components/About';
@@ -11,8 +9,8 @@ import WhyHavelent from "@/components/WhyHavelent";
 import FAQ from "@/components/FAQ";
 
 export default function Home() {
-return (
-  <IntroProvider>
+  return (
+    <>
       <Hero />
       <WhyHavelent />
       <Services />
@@ -20,6 +18,6 @@ return (
       <About />
       <Contact />
       <Footer />
-    </IntroProvider>
+    </>
   );
 }

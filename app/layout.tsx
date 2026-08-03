@@ -1,8 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter, Playfair_Display } from 'next/font/google';
-import CursorGlow from "@/components/CursorGlow";
-import Navbar from "@/components/Navbar";
+import ClientRoot from "@/components/ClientRoot";
 import { League_Spartan } from "next/font/google";
 
 
@@ -45,14 +44,16 @@ export default function RootLayout({
 
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+
+
 <body
   className={`${inter.variable} ${playfair.variable} ${leagueSpartan.variable}`}
 >
-
-  <CursorGlow />
-  <Navbar />
-  {children}
+  <ClientRoot>
+    {children}
+  </ClientRoot>
 </body>
+
     </html>
   );
 }
