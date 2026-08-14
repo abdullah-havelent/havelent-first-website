@@ -17,14 +17,15 @@ export default function AnimatedCards() {
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 md:grid-cols-2 xl:grid-cols-4">
         {images.map((src, index) => (
 <motion.div
+  key={index}
   initial={{
-  opacity: 0,
-  x: -70,
-  y: 50,
-  rotate: -4,
-  scale: 0.92,
-  filter: "blur(12px)",
-}}
+    opacity: 0,
+    x: -70,
+    y: 50,
+    rotate: -4,
+    scale: 0.92,
+    filter: "blur(12px)",
+  }}
   whileInView={{
     opacity: 1,
     x: 0,
@@ -33,10 +34,13 @@ export default function AnimatedCards() {
     scale: 1,
     filter: "blur(0px)",
   }}
-  viewport={{ once: true, amount: 0.25 }}
-  transition={{
-  duration: 1.15,
-  delay: 1.2 + index * 0.18,
+  viewport={{
+    once: true,
+    amount: 0.25,
+  }}
+transition={{
+  duration: 0.58,
+  delay: 0.6 + index * 0.09,
   ease: [0.22, 1, 0.36, 1],
 }}
 >

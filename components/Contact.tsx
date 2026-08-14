@@ -91,9 +91,9 @@ export default function Contact() {
 
               <div className="mt-8 space-y-4">
                 {[
-                  { icon: Mail, label: 'hello@havelent.studio' },
+                  { icon: Mail, label: 'abdullah@havelent.com' },
                   { icon: Phone, label: '+1 (415) 555-0142' },
-                  { icon: MapPin, label: 'San Francisco · Remote worldwide' },
+                  { icon: MapPin, label: 'Based in Portugal · Serving clients worldwide' },
                 ].map((item) => (
                   <div key={item.label} className="flex items-center gap-3 text-sm text-white/70">
                     <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5">

@@ -3,25 +3,16 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+
 
 const LINKS = ['Home', 'Services', 'About', 'Contact Us'];
-const getHref = (link: string) => {
-  switch (link) {
-    case "Home":
-      return "/";
-    case "Services":
-      return "/services";
-    case "About":
-      return "/about";
-    case "Contact Us":
-      return "/contact";
-    default:
-      return "/";
-  }
-};
+
 
 export default function Navbar() {
   const [active, setActive] = useState('Home');
+  const router = useRouter();
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [manualNav, setManualNav] = useState(false);
@@ -79,28 +70,42 @@ export default function Navbar() {
 }, [manualNav]);
 
 const handleNav = (link: string) => {
-  setManualNav(true);
-  setActive(link);
   setOpen(false);
 
-  switch (link) {
-    case "Home":
-  document.getElementById("home")?.scrollIntoView({
-    behavior: "smooth",
-  });
-  break;
+  // If we are NOT on the homepage,
+  // every navbar link goes to the homepage.
+  if (pathname !== "/") {
+    setActive("Home");
+    router.push("/");
+    return;
+  }
 
-    case "Services":
-      window.location.href = "/#services";
-      break;
+  // Homepage navigation
+  const sectionMap: Record<string, string> = {
+    Home: "home",
+    Services: "services",
+    About: "about",
+    "Contact Us": "contact",
+  };
 
-    case "About":
-      window.location.href = "/#about";
-      break;
+  const sectionId = sectionMap[link];
 
-    case "Contact Us":
-      window.location.href = "/#contact";
-      break;
+  if (!sectionId) return;
+
+  const section = document.getElementById(sectionId);
+
+  if (section) {
+    setManualNav(true);
+    setActive(link);
+
+    section.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+
+    setTimeout(() => {
+      setManualNav(false);
+    }, 800);
   }
 };
 

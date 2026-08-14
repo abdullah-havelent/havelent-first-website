@@ -147,21 +147,22 @@ style={{
                   className="w-full flex items-center justify-between px-8 py-7 text-left"
                 >
 <h3
-  className={
-    `font-playfair
-    text-[2rem]
-    md:text-[1.55rem]
-    font-bold
-    leading-[1.15]
-    tracking-[-0.02em]
+  className={`
+    font-display
+    text-[2.35rem]
+    md:text-[2.6rem]
+    font-semibold
+    leading-[1.08]
+    tracking-[-0.03em]
     pr-6
     transition-all
-    duration-500 ${
-open
-  ? "bg-[linear-gradient(90deg,#F47A20_0%,#F35B1F_55%,#D94841_100%)] bg-clip-text text-transparent"
-  : "text-white"
-    }`
-  }
+    duration-500
+    ${
+      open
+        ? "text-gradient-orange"
+        : "text-white"
+    }
+  `}
 >
   {faq.question}
 </h3>
