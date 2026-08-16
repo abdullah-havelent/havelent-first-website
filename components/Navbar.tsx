@@ -5,120 +5,294 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 
+const LINKS = ['Home', 'Our Work', 'Services', 'About', 'Contact Us'];
 
-const LINKS = ['Home', 'Services', 'About', 'Contact Us'];
-
+const SECTION_MAP: Record<string, string> = {
+  'Our Work': 'our-work',
+  Services: 'services',
+  About: 'about',
+  'Contact Us': 'contact',
+};
 
 export default function Navbar() {
   const [active, setActive] = useState('Home');
   const router = useRouter();
   const pathname = usePathname();
+
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [manualNav, setManualNav] = useState(false);
 
-
+  /*
+   * ----------------------------------------------------
+   * Scroll state
+   * ----------------------------------------------------
+   */
   useEffect(() => {
-  const handleScroll = () => {
-    setScrolled(window.scrollY > 40);
-  };
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 40);
+    };
 
-  window.addEventListener("scroll", handleScroll);
-  handleScroll();
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
 
-  return () => window.removeEventListener("scroll", handleScroll);
-}, []);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
-
-
+  /*
+   * ----------------------------------------------------
+   * Active section detection on HOME page
+   * ----------------------------------------------------
+   */
   useEffect(() => {
-  const sections = ["home", "services", "about", "contact"];
+    if (pathname !== '/') {
+      return;
+    }
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
+    const sections = [
+      'home',
+      'our-work',
+      'services',
+      'about',
+      'contact',
+    ];
+
+    const observer = new IntersectionObserver(
+      (entries) => {
         if (manualNav) return;
-        if (!entry.isIntersecting) return;
 
-        switch (entry.target.id) {
-          case "home":
-            setActive("Home");
+        const visibleEntry = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort(
+            (a, b) =>
+              b.intersectionRatio - a.intersectionRatio
+          )[0];
+
+        if (!visibleEntry) return;
+
+        switch (visibleEntry.target.id) {
+          case 'home':
+            setActive('Home');
             break;
-          case "services":
-            setActive("Services");
+
+          case 'our-work':
+            setActive('Our Work');
             break;
-          case "about":
-            setActive("About");
+
+          case 'services':
+            setActive('Services');
             break;
-          case "contact":
-            setActive("Contact Us");
+
+          case 'about':
+            setActive('About');
+            break;
+
+          case 'contact':
+            setActive('Contact Us');
             break;
         }
-      });
-    },
-    {
-      threshold: 0.55,
-    }
-  );
+      },
+      {
+        threshold: [0.25, 0.5, 0.75],
+      }
+    );
 
-  sections.forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) observer.observe(el);
-  });
+    sections.forEach((id) => {
+      const element = document.getElementById(id);
 
-  return () => observer.disconnect();
-}, [manualNav]);
-
-const handleNav = (link: string) => {
-  setOpen(false);
-
-  // If we are NOT on the homepage,
-  // every navbar link goes to the homepage.
-  if (pathname !== "/") {
-    setActive("Home");
-    router.push("/");
-    return;
-  }
-
-  // Homepage navigation
-  const sectionMap: Record<string, string> = {
-    Home: "home",
-    Services: "services",
-    About: "about",
-    "Contact Us": "contact",
-  };
-
-  const sectionId = sectionMap[link];
-
-  if (!sectionId) return;
-
-  const section = document.getElementById(sectionId);
-
-  if (section) {
-    setManualNav(true);
-    setActive(link);
-
-    section.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
+      if (element) {
+        observer.observe(element);
+      }
     });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [pathname, manualNav]);
+
+  /*
+   * ----------------------------------------------------
+   * Scroll to a section on HOME page
+   * ----------------------------------------------------
+   */
+  const scrollToSection = (sectionId: string) => {
+    const section = document.getElementById(sectionId);
+
+    if (!section) {
+      return false;
+    }
+
+    setManualNav(true);
+
+    const navOffset = 100;
+
+    const sectionTop =
+      section.getBoundingClientRect().top +
+      window.scrollY -
+      navOffset;
+
+    window.scrollTo({
+      top: Math.max(0, sectionTop),
+      behavior: 'smooth',
+    });
+
+    const activeLink =
+      Object.entries(SECTION_MAP).find(
+        ([, id]) => id === sectionId
+      )?.[0];
+
+    if (activeLink) {
+      setActive(activeLink);
+    }
+
+    window.history.replaceState(
+      null,
+      '',
+      `#${sectionId}`
+    );
 
     setTimeout(() => {
       setManualNav(false);
-    }, 800);
-  }
-};
+    }, 900);
 
+    return true;
+  };
+
+  /*
+   * ----------------------------------------------------
+   * If we came from an INNER PAGE to HOME,
+   * scroll to the requested section after HOME loads.
+   * ----------------------------------------------------
+   */
+  useEffect(() => {
+    if (pathname !== '/') {
+      return;
+    }
+
+    const target = sessionStorage.getItem(
+      'havelent-scroll-target'
+    );
+
+    if (!target) {
+      return;
+    }
+
+    sessionStorage.removeItem(
+      'havelent-scroll-target'
+    );
+
+    /*
+     * Wait for the Home page sections to mount.
+     */
+    const timer = window.setTimeout(() => {
+      scrollToSection(target);
+    }, 250);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [pathname]);
+
+  /*
+   * ----------------------------------------------------
+   * NAVIGATION
+   * ----------------------------------------------------
+   */
+  const handleNav = (link: string) => {
+    setOpen(false);
+
+    /*
+     * HOME
+     */
+    if (link === 'Home') {
+      if (pathname === '/') {
+        setManualNav(true);
+        setActive('Home');
+
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+
+        window.history.replaceState(
+          null,
+          '',
+          '/'
+        );
+
+        setTimeout(() => {
+          setManualNav(false);
+        }, 900);
+      } else {
+        /*
+         * Inner page → Home top
+         */
+        router.push('/');
+      }
+
+      return;
+    }
+
+    /*
+     * OUR WORK / SERVICES / ABOUT / CONTACT
+     */
+    const sectionId = SECTION_MAP[link];
+
+    if (!sectionId) {
+      return;
+    }
+
+    /*
+     * ------------------------------------------------
+     * If already on HOME:
+     * just smooth scroll.
+     * ------------------------------------------------
+     */
+    if (pathname === '/') {
+      scrollToSection(sectionId);
+      return;
+    }
+
+    /*
+     * ------------------------------------------------
+     * If on ANY INNER PAGE:
+     *
+     * Save requested section first.
+     * Then go Home.
+     *
+     * Home will read this value and scroll there.
+     * ------------------------------------------------
+     */
+    sessionStorage.setItem(
+      'havelent-scroll-target',
+      sectionId
+    );
+
+    router.push('/');
+  };
+
+  /*
+   * ----------------------------------------------------
+   * RENDER
+   * ----------------------------------------------------
+   */
   return (
     <motion.header
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      transition={{
+        duration: 0.8,
+        ease: [0.22, 1, 0.36, 1],
+      }}
       className="fixed top-4 left-0 right-0 z-[200] flex justify-center px-4"
     >
       <nav
         className={`glass flex items-center gap-1 rounded-full border border-white/10 px-2 py-2 transition-all duration-500 ${
-          scrolled ? 'shadow-[0_8px_40px_-8px_rgba(249,115,22,0.35)]' : ''
+          scrolled
+            ? 'shadow-[0_8px_40px_-8px_rgba(249,115,22,0.35)]'
+            : ''
         }`}
         style={{
           boxShadow: scrolled
@@ -126,81 +300,115 @@ const handleNav = (link: string) => {
             : '0 4px 24px -6px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06)',
         }}
       >
-{/* Brand */}
-<button
-  onClick={() => handleNav("Home")}
-  className="group flex items-center rounded-full px-3 py-2"
-  data-cursor="button"
->
-  <img
-    src="/logos/horizontal-white.svg"
-    alt="Havelent"
-    className="h-10 w-auto transition-all duration-300 group-hover:scale-[1.03]"
-    draggable={false}
-  />
-</button>
+        {/* Brand */}
+        <button
+          onClick={() => handleNav('Home')}
+          className="group flex items-center rounded-full px-3 py-2"
+          data-cursor="button"
+        >
+          <img
+            src="/logos/horizontal-white.svg"
+            alt="Havelent"
+            className="h-10 w-auto transition-all duration-300 group-hover:scale-[1.03]"
+            draggable={false}
+          />
+        </button>
 
         {/* Desktop links */}
         <div className="ml-1 hidden items-center gap-1 md:flex">
-         {LINKS.map((link, i) => (
-  <motion.div
-    key={link}
-    initial={{ opacity: 0, y: -8 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, delay: 0.5 + i * 0.08 }}
-  >
-    <motion.button
-  key={link}
-  initial={{ opacity: 0, y: -8 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.5, delay: 0.5 + i * 0.08 }}
-  onClick={() => handleNav(link)}
-  data-cursor="button"
-  className={`nav-link relative rounded-full px-4 py-2 text-base font-medium transition-colors duration-300 ${
-    active === link
-      ? 'text-brand-orange active'
-      : 'text-white/100 hover:text-brand-orange'
-  }`}
->
-  {link}
-  <span className="nav-underline" />
-  {active === link && (
-    <motion.span
-      layoutId="nav-dot"
-      className="absolute left-1/2 -bottom-0.5 h-1 w-1 -translate-x-1/2 rounded-full bg-brand-orange"
-      style={{ boxShadow: '0 0 8px 2px rgba(249,115,22,0.8)' }}
-    />
-  )}
-</motion.button>
-  </motion.div>
-))}
+          {LINKS.map((link, i) => (
+            <motion.div
+              key={link}
+              initial={{
+                opacity: 0,
+                y: -8,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                duration: 0.5,
+                delay: 0.5 + i * 0.08,
+              }}
+            >
+              <motion.button
+                onClick={() => handleNav(link)}
+                data-cursor="button"
+                className={`nav-link relative rounded-full px-4 py-2 text-base font-medium transition-colors duration-300 ${
+                  active === link
+                    ? 'text-brand-orange active'
+                    : 'text-white/100 hover:text-brand-orange'
+                }`}
+              >
+                {link}
+
+                <span className="nav-underline" />
+
+                {active === link && (
+                  <motion.span
+                    layoutId="nav-dot"
+                    className="absolute -bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-brand-orange"
+                    style={{
+                      boxShadow:
+                        '0 0 8px 2px rgba(249,115,22,0.8)',
+                    }}
+                  />
+                )}
+              </motion.button>
+            </motion.div>
+          ))}
         </div>
 
         {/* Desktop actions */}
         <div className="hidden items-center gap-3 md:flex">
           <motion.button
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.58 + LINKS.length * 0.08 }}
+            initial={{
+              opacity: 0,
+              y: -8,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.5,
+              delay:
+                0.58 + LINKS.length * 0.08,
+            }}
             data-cursor="button"
-            onClick={() => handleNav("Contact Us")}
+            onClick={() =>
+              handleNav('Contact Us')
+            }
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.97 }}
             className="relative overflow-hidden rounded-full bg-gradient-to-r from-brand-accent to-brand-orange px-5 py-2 text-sm font-semibold text-white transition-all duration-300"
-            style={{ boxShadow: '0 0 20px -4px rgba(249,115,22,0.5)' }}
+            style={{
+              boxShadow:
+                '0 0 20px -4px rgba(249,115,22,0.5)',
+            }}
           >
-            <span className="relative z-10">Get a Quote</span>
+            <span className="relative z-10">
+              Get a Quote
+            </span>
+
             <span className="absolute inset-0 bg-gradient-to-r from-brand-orange to-brand-red opacity-0 transition-opacity duration-300 hover:opacity-100" />
           </motion.button>
         </div>
 
         {/* Mobile toggle */}
         <button
-          onClick={() => setOpen((o) => !o)}
+          onClick={() =>
+            setOpen((o) => !o)
+          }
           className="ml-1 flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white md:hidden"
           aria-label="Menu"
         >
-          {open ? <X size={16} /> : <Menu size={16} />}
+          {open ? (
+            <X size={16} />
+          ) : (
+            <Menu size={16} />
+          )}
         </button>
       </nav>
 
@@ -208,33 +416,82 @@ const handleNav = (link: string) => {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.3 }}
-            className="glass absolute top-20 left-4 right-4 rounded-3xl border border-white/10 p-4 md:hidden"
+            initial={{
+              opacity: 0,
+              y: -12,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            exit={{
+              opacity: 0,
+              y: -12,
+            }}
+            transition={{
+              duration: 0.3,
+            }}
+            className="glass absolute left-4 right-4 top-20 rounded-3xl border border-white/10 p-4 md:hidden"
           >
             {LINKS.map((link) => (
+              <motion.button
+                key={link}
+                onClick={() =>
+                  handleNav(link)
+                }
+                className={`block w-full rounded-2xl px-4 py-3 text-left text-sm font-medium transition-colors ${
+                  active === link
+                    ? 'bg-brand-orange/10 text-brand-orange'
+                    : 'text-white/80 hover:text-brand-orange'
+                }`}
+              >
+                {link}
+              </motion.button>
+            ))}
+<div className="mt-3">
   <motion.button
-  key={link}
-  onClick={() => handleNav(link)}
-    className={`block w-full rounded-2xl px-4 py-3 text-left text-sm font-medium transition-colors ${
-      active === link
-        ? 'bg-brand-orange/10 text-brand-orange'
-        : 'text-white/80 hover:text-brand-orange'
-    }`}
+    whileHover={{ scale: 1.02 }}
+    whileTap={{ scale: 0.98 }}
+    onClick={() => handleNav("Contact Us")}
+    data-cursor="button"
+    className="
+      relative
+      w-full
+      overflow-hidden
+      rounded-full
+      bg-gradient-to-r
+      from-brand-accent
+      to-brand-orange
+      px-5
+      py-3
+      text-sm
+      font-semibold
+      text-white
+    "
+    style={{
+      boxShadow:
+        '0 0 20px -4px rgba(249,115,22,0.5)',
+    }}
   >
-    {link}
+    <span className="relative z-10">
+      Get a Free Quote
+    </span>
+
+    <span
+      className="
+        absolute
+        inset-0
+        bg-gradient-to-r
+        from-brand-orange
+        to-brand-red
+        opacity-0
+        transition-opacity
+        duration-300
+        hover:opacity-100
+      "
+    />
   </motion.button>
-))}
-            <div className="mt-3 flex gap-2">
-              <button className="flex-1 rounded-full border border-white/25 px-4 py-2.5 text-sm font-medium text-white">
-                Sign Up
-              </button>
-              <button className="flex-1 rounded-full bg-gradient-to-r from-brand-accent to-brand-orange px-4 py-2.5 text-sm font-semibold text-white">
-                Login
-              </button>
-            </div>
+</div>
           </motion.div>
         )}
       </AnimatePresence>

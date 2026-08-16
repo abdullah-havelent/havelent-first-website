@@ -2,6 +2,8 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Footer from '@/components/Footer';
+
 
 export default function FounderPage() {
   return (
@@ -159,7 +161,7 @@ export default function FounderPage() {
 
             <p className="mt-8 max-w-4xl text-lg leading-9 text-white/60">
               There are countless agencies that can deliver a design, edit a
-              video, or build a website. What matters is the thinking behind
+              video, or manage your social media. What matters is the thinking behind
               the work.
             </p>
 
@@ -307,7 +309,9 @@ export default function FounderPage() {
 </Link>
         </motion.div>
       </section>
-
+      
+      <Footer />
+      
     </main>
   );
 }

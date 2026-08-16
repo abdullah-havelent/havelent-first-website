@@ -1,8 +1,9 @@
 'use client';
 
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import React from 'react';
+import ServiceOutlineText from '@/components/ServiceOutlineText';
 
 const headingWords = [
   { text: 'Every', color: 'white' },
@@ -34,6 +35,12 @@ export default function Hero() {
       onMouseMove={onMouseMove}
       className="relative flex min-h-[88vh] w-full flex-col items-center justify-start overflow-hidden px-6 pt-32 pb-8"
     >
+
+{/* Outline Text */}
+<ServiceOutlineText text="GRAPHIC DESIGN" scaleX={0.81} />
+
+
+
       {/* Background grid */}
       <div className="bg-grid pointer-events-none absolute inset-0 opacity-[0.08]" />
 
@@ -54,26 +61,10 @@ export default function Hero() {
       <div className="noise" />
       <div className="pointer-events-none absolute bottom-0 left-0 h-40 w-full bg-gradient-to-b from-transparent via-black/30 to-black" />
 
-      {/* Badge */}
-      <motion.button
-  initial={{ opacity: 0, y: 20 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-  whileHover={{ scale: 1.04, y: -2 }}
-  data-cursor="button"
-  className={`group relative mb-8 inline-flex items-center gap-2 rounded-full border min-w-[190px] justify-center px-5 py-2 text-sm font-medium transition-all duration-300 ${
-    'border-white/15 bg-white text-brand-dark'
-  }`}
->
-  <>
-  <Sparkles size={14} className="text-brand-orange" />
-  <span className="font-medium">🎨 Graphic Design</span>
-  <span className="ml-1 h-1.5 w-1.5 rounded-full bg-brand-orange" />
-</>
-</motion.button>
+ 
 
       {/* Heading */}
-      <h1 className="font-display text-center text-[clamp(2.75rem,7vw,6.5rem)] font-semibold leading-[1.2] tracking-tight">
+      <h1 className="mt-20 font-display text-center text-[clamp(2.75rem,7vw,6.5rem)] font-semibold leading-[1.2] tracking-tight">
         {headingWords.map((word, i) => (
           <span key={i} className="mr-3 inline-block overflow-hidden align-bottom">
             <motion.span
