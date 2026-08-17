@@ -126,7 +126,7 @@ export default function Navbar() {
 
     setManualNav(true);
 
-    const navOffset = 100;
+    const navOffset = 0;
 
     const sectionTop =
       section.getBoundingClientRect().top +

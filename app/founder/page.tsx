@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
 
-
 export default function FounderPage() {
   return (
     <main className="relative overflow-hidden bg-brand-dark text-white">
@@ -30,40 +29,41 @@ export default function FounderPage() {
               </span>
             </h1>
 
-            <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/60">
+            <p className="mt-8 max-w-xl text-xl font-normal leading-relaxed text-white/60">
               I’m Abdullah Rajpoot, the Founder and CEO of Havelent.
               I built Havelent with one belief—great design should do more
               than earn attention. It should earn trust.
             </p>
 
-            <p className="mt-6 max-w-xl leading-relaxed text-white/55">
+            <p className="mt-6 max-w-xl text-lg font-normal leading-relaxed text-white/55">
               Every project starts with understanding the problem, not rushing
               to the solution. We create digital experiences that feel
               premium, purposeful, and built to last.
             </p>
 
-
-            <p className="mt-6 max-w-xl leading-relaxed text-white/55">
-             <a
-  href="mailto:abdullah@havelent.com"
-  className="text-white/70 transition-colors duration-300 hover:text-brand-orange"
->
-  abdullah@havelent.com
-</a>
-
+            <p className="mt-6 max-w-xl text-lg font-normal leading-relaxed text-white/55">
+              <a
+                href="mailto:abdullah@havelent.com"
+                className="text-white/70 transition-colors duration-300 hover:text-brand-orange"
+              >
+                abdullah@havelent.com
+              </a>
             </p>
 
-
             <div className="mt-10 flex flex-wrap gap-4">
-<Link
-  href="/#contact"
-  className="group relative inline-flex overflow-hidden rounded-full bg-gradient-to-r from-brand-accent to-brand-orange px-7 py-3 font-medium text-white transition-all duration-300 hover:scale-105"
-  style={{ boxShadow: '0 0 20px -4px rgba(249,115,22,0.5)' }}
->
-  <span className="relative z-10">Get a Free Quote</span>
+              <Link
+                href="/#contact"
+                className="group relative inline-flex overflow-hidden rounded-full bg-gradient-to-r from-brand-accent to-brand-orange px-7 py-3 font-medium text-white transition-all duration-300 hover:scale-105"
+                style={{
+                  boxShadow: '0 0 20px -4px rgba(249,115,22,0.5)',
+                }}
+              >
+                <span className="relative z-10">
+                  Get a Free Quote
+                </span>
 
-  <span className="absolute inset-0 bg-gradient-to-r from-brand-orange to-brand-red opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-</Link>
+                <span className="absolute inset-0 bg-gradient-to-r from-brand-orange to-brand-red opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              </Link>
 
               <Link
                 href="/"
@@ -116,21 +116,21 @@ export default function FounderPage() {
               Why I Built Havelent.
             </h2>
 
-            <p className="mt-8 text-lg leading-9 text-white/60">
+            <p className="mt-8 text-lg font-normal leading-9 text-white/60">
               I’ve always believed that creativity becomes truly powerful
               when it has a clear purpose behind it. Businesses deserve more
               than beautiful visuals. They deserve digital experiences that
               communicate clearly, inspire confidence, and create lasting value.
             </p>
 
-            <p className="mt-6 text-lg leading-9 text-white/60">
+            <p className="mt-6 text-lg font-normal leading-9 text-white/60">
               Havelent was created to bring that mindset into every project.
               Instead of treating design, content, branding, and technology
               as separate pieces, we look at the bigger picture and focus on
               how everything works together.
             </p>
 
-            <p className="mt-6 text-lg leading-9 text-white/60">
+            <p className="mt-6 text-lg font-normal leading-9 text-white/60">
               For me, Havelent is more than a digital agency. It is a place
               where ideas are turned into meaningful work through creativity,
               strategy, and thoughtful execution.
@@ -159,20 +159,20 @@ export default function FounderPage() {
               More Than Just Another Agency.
             </h2>
 
-            <p className="mt-8 max-w-4xl text-lg leading-9 text-white/60">
+            <p className="mt-8 max-w-4xl text-lg font-normal leading-9 text-white/60">
               There are countless agencies that can deliver a design, edit a
               video, or manage your social media. What matters is the thinking behind
               the work.
             </p>
 
-            <p className="mt-6 max-w-4xl text-lg leading-9 text-white/60">
+            <p className="mt-6 max-w-4xl text-lg font-normal leading-9 text-white/60">
               At Havelent, we focus on understanding the story, audience, and
               goals behind every project before we start creating. The result
               is work that is not only visually strong, but purposeful and
               aligned with the business behind it.
             </p>
 
-            <p className="mt-6 max-w-4xl text-lg leading-9 text-white/60">
+            <p className="mt-6 max-w-4xl text-lg font-normal leading-9 text-white/60">
               Our goal is simple: create work that makes your business look
               professional, communicate with confidence, and stand apart in
               a crowded digital world.
@@ -230,7 +230,7 @@ export default function FounderPage() {
                   {item.title}
                 </h3>
 
-                <p className="mt-4 leading-8 text-white/55">
+                <p className="mt-4 text-lg font-normal leading-8 text-white/55">
                   {item.text}
                 </p>
               </motion.div>
@@ -259,19 +259,19 @@ export default function FounderPage() {
               Building Something That Lasts.
             </h2>
 
-            <p className="mt-8 text-lg leading-9 text-white/60">
+            <p className="mt-8 text-lg font-normal leading-9 text-white/60">
               Havelent is still growing, and that is part of the journey.
               Every project, every client, and every challenge gives us another
               opportunity to improve what we do.
             </p>
 
-            <p className="mt-6 text-lg leading-9 text-white/60">
+            <p className="mt-6 text-lg font-normal leading-9 text-white/60">
               My vision is to build Havelent into a creative company known
               not only for the quality of its work, but for the thinking,
               trust, and craftsmanship behind it.
             </p>
 
-            <p className="mt-6 text-lg leading-9 text-white/60">
+            <p className="mt-6 text-lg font-normal leading-9 text-white/60">
               We’re not trying to become the biggest agency.
               We’re focused on becoming one that people trust.
             </p>
@@ -293,25 +293,29 @@ export default function FounderPage() {
             Let’s Build Something Great Together.
           </h2>
 
-          <p className="mx-auto mt-6 max-w-2xl text-white/60">
+          <p className="mx-auto mt-6 max-w-2xl text-lg font-normal leading-8 text-white/60">
             Whether you’re building a brand from scratch or elevating an
             existing one, let’s turn your vision into something meaningful.
           </p>
 
-<Link
-  href="/#contact"
-  className="group relative mt-10 inline-flex overflow-hidden rounded-full bg-gradient-to-r from-brand-accent to-brand-orange px-8 py-4 font-medium text-white transition-all duration-300 hover:scale-105"
-  style={{ boxShadow: '0 0 20px -4px rgba(249,115,22,0.5)' }}
->
-  <span className="relative z-10">Get a Free Quote</span>
+          <Link
+            href="/#contact"
+            className="group relative mt-10 inline-flex overflow-hidden rounded-full bg-gradient-to-r from-brand-accent to-brand-orange px-8 py-4 font-medium text-white transition-all duration-300 hover:scale-105"
+            style={{
+              boxShadow: '0 0 20px -4px rgba(249,115,22,0.5)',
+            }}
+          >
+            <span className="relative z-10">
+              Get a Free Quote
+            </span>
 
-  <span className="absolute inset-0 bg-gradient-to-r from-brand-orange to-brand-red opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-</Link>
+            <span className="absolute inset-0 bg-gradient-to-r from-brand-orange to-brand-red opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          </Link>
         </motion.div>
       </section>
-      
+
       <Footer />
-      
+
     </main>
   );
 }

@@ -233,9 +233,9 @@ transformOrigin: "center center",
                         {p.title}
                       </h3>
 
-                      <p className="mt-2 text-sm leading-relaxed text-white/55">
-                        {p.body}
-                      </p>
+<p className="mt-2 text-sm leading-relaxed font-normal text-white/60">
+  {p.body}
+</p>
                     </div>
                   </div>
 

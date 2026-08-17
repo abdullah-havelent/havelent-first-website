@@ -33,78 +33,6 @@ const headingWords = [
 
 
 // ==========================================
-// LIVE COUNTER SETTINGS
-// ==========================================
-
-const TOTAL_LOOPS = 100;
-const NUMBERS_PER_LOOP = 10;
-const CHANGE_INTERVAL = 2000;
-
-const STORAGE_KEY = 'havelent_live_counter_v3';
-
-
-// ==========================================
-// GENERATE RANDOM NUMBER
-// ==========================================
-
-function generateNumber(): number {
-  return Math.floor(Math.random() * 875) + 8;
-}
-
-
-// ==========================================
-// SHUFFLE ARRAY
-// ==========================================
-
-function shuffleArray<T>(array: T[]): T[] {
-  const copy = [...array];
-
-  for (let i = copy.length - 1; i > 0; i--) {
-    const randomIndex = Math.floor(Math.random() * (i + 1));
-
-    [copy[i], copy[randomIndex]] = [
-      copy[randomIndex],
-      copy[i],
-    ];
-  }
-
-  return copy;
-}
-
-
-// ==========================================
-// GENERATE ONE LOOP
-// ==========================================
-
-function generateLoop(): number[] {
-  const numbers: number[] = [];
-
-  while (numbers.length < NUMBERS_PER_LOOP) {
-    const number = generateNumber();
-
-    if (!numbers.includes(number)) {
-      numbers.push(number);
-    }
-  }
-
-  // Extra shuffle so every loop has a random order
-  return shuffleArray(numbers);
-}
-
-
-// ==========================================
-// GENERATE 100 LOOPS
-// ==========================================
-
-function generateAllLoops(): number[][] {
-  return Array.from(
-    { length: TOTAL_LOOPS },
-    () => generateLoop()
-  );
-}
-
-
-// ==========================================
 // HERO COMPONENT
 // ==========================================
 
@@ -114,38 +42,47 @@ export default function Hero() {
   // PARALLAX
   // ==========================================
 
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
+  const mx =
+    useMotionValue(0);
 
-  const sx = useSpring(mx, {
-    damping: 40,
-    stiffness: 120,
-  });
+  const my =
+    useMotionValue(0);
 
-  const sy = useSpring(my, {
-    damping: 40,
-    stiffness: 120,
-  });
+  const sx =
+    useSpring(mx, {
+      damping: 40,
+      stiffness: 120,
+    });
 
-  const tx1 = useTransform(
-    sx,
-    (v) => `${v * 5}px`
-  );
+  const sy =
+    useSpring(my, {
+      damping: 40,
+      stiffness: 120,
+    });
 
-  const ty1 = useTransform(
-    sy,
-    (v) => `${v * 5}px`
-  );
+  const tx1 =
+    useTransform(
+      sx,
+      (v) => `${v * 5}px`
+    );
 
-  const tx2 = useTransform(
-    sx,
-    (v) => `${v * -8}px`
-  );
+  const ty1 =
+    useTransform(
+      sy,
+      (v) => `${v * 5}px`
+    );
 
-  const ty2 = useTransform(
-    sy,
-    (v) => `${v * -8}px`
-  );
+  const tx2 =
+    useTransform(
+      sx,
+      (v) => `${v * -8}px`
+    );
+
+  const ty2 =
+    useTransform(
+      sy,
+      (v) => `${v * -8}px`
+    );
 
 
   const onMouseMove = (
@@ -193,473 +130,7 @@ export default function Hero() {
   };
 
 
-  // ==========================================
-  // LIVE COUNTER STATE
-  // ==========================================
-
-  const [
-    counterLoops,
-    setCounterLoops,
-  ] = React.useState<number[][]>([]);
-
-  const [
-    activeLoop,
-    setActiveLoop,
-  ] = React.useState(0);
-
-  const [
-    counterIndex,
-    setCounterIndex,
-  ] = React.useState(0);
-
-
-  // ==========================================
-  // INITIALIZE COUNTER
-  // ==========================================
-
-  React.useEffect(() => {
-
-    if (
-      typeof window === 'undefined'
-    ) {
-      return;
-    }
-
-    try {
-
-      const savedData =
-        localStorage.getItem(
-          STORAGE_KEY
-        );
-
-
-      // ========================================
-      // LOAD EXISTING COUNTER
-      // ========================================
-
-      if (savedData) {
-
-        const parsed =
-          JSON.parse(savedData);
-
-
-        if (
-          parsed &&
-          Array.isArray(parsed.loops) &&
-          Array.isArray(parsed.usedLoops)
-        ) {
-
-          let loops =
-            parsed.loops as number[][];
-
-          let usedLoops =
-            parsed.usedLoops as number[];
-
-          let currentLoop =
-            typeof parsed.currentLoop === 'number'
-              ? parsed.currentLoop
-              : 0;
-
-          let currentIndex =
-            typeof parsed.currentIndex === 'number'
-              ? parsed.currentIndex
-              : 0;
-
-
-          // ======================================
-          // IF 100 LOOPS ARE FINISHED
-          // ======================================
-
-          if (
-            usedLoops.length >= TOTAL_LOOPS
-          ) {
-
-            loops =
-              generateAllLoops();
-
-            usedLoops = [];
-
-            currentLoop = 0;
-            currentIndex = 0;
-
-          }
-
-
-          // ======================================
-          // SAFETY CHECK
-          // ======================================
-
-          if (
-            !loops[currentLoop] ||
-            currentIndex >= NUMBERS_PER_LOOP
-          ) {
-
-            currentLoop = 0;
-            currentIndex = 0;
-
-          }
-
-
-          setCounterLoops(loops);
-          setActiveLoop(currentLoop);
-          setCounterIndex(currentIndex);
-
-          return;
-        }
-      }
-
-
-      // ========================================
-      // FIRST VISIT
-      // CREATE 100 NEW LOOPS
-      // ========================================
-
-      const newLoops =
-        generateAllLoops();
-
-
-      // ========================================
-      // RANDOMIZE LOOP ORDER
-      // ========================================
-
-      const shuffledIndexes =
-        shuffleArray(
-          Array.from(
-            { length: TOTAL_LOOPS },
-            (_, index) => index
-          )
-        );
-
-
-      const firstLoop =
-        shuffledIndexes[0];
-
-
-      // ========================================
-      // RANDOM STARTING NUMBER
-      // ========================================
-
-      const randomStart =
-        Math.floor(
-          Math.random() *
-            NUMBERS_PER_LOOP
-        );
-
-
-      // ========================================
-      // SAVE INITIAL STATE
-      // ========================================
-
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({
-          loops: newLoops,
-          usedLoops: [firstLoop],
-          currentLoop: firstLoop,
-          currentIndex: randomStart,
-        })
-      );
-
-
-      setCounterLoops(newLoops);
-
-      setActiveLoop(firstLoop);
-
-      setCounterIndex(randomStart);
-
-
-    } catch (error) {
-
-      console.error(
-        'Havelent counter error:',
-        error
-      );
-
-
-      // ========================================
-      // FALLBACK
-      // ========================================
-
-      const fallbackLoops =
-        generateAllLoops();
-
-
-      setCounterLoops(
-        fallbackLoops
-      );
-
-      setActiveLoop(0);
-      setCounterIndex(0);
-
-    }
-
-  }, []);
-
-
-  // ==========================================
-  // CHANGE NUMBER EVERY 2 SECONDS
-  // ==========================================
-
-  React.useEffect(() => {
-
-    if (
-      counterLoops.length === 0
-    ) {
-      return;
-    }
-
-
-    const interval =
-      setInterval(() => {
-
-        setCounterIndex(
-          (prevIndex) => {
-
-            // ==================================
-            // NORMAL NUMBER CHANGE
-            // ==================================
-
-            if (
-              prevIndex <
-              NUMBERS_PER_LOOP - 1
-            ) {
-
-              const nextIndex =
-                prevIndex + 1;
-
-
-              // SAVE CURRENT POSITION
-              try {
-
-                const savedData =
-                  localStorage.getItem(
-                    STORAGE_KEY
-                  );
-
-
-                if (savedData) {
-
-                  const parsed =
-                    JSON.parse(savedData);
-
-
-                  localStorage.setItem(
-                    STORAGE_KEY,
-                    JSON.stringify({
-                      ...parsed,
-                      currentLoop: activeLoop,
-                      currentIndex: nextIndex,
-                    })
-                  );
-
-                }
-
-              } catch {
-                // Ignore storage errors
-              }
-
-
-              return nextIndex;
-            }
-
-
-            // ==================================
-            // 10 NUMBERS COMPLETE
-            // MOVE TO NEXT UNUSED LOOP
-            // ==================================
-
-            let nextLoop =
-              activeLoop;
-
-
-            try {
-
-              const savedData =
-                localStorage.getItem(
-                  STORAGE_KEY
-                );
-
-
-              if (savedData) {
-
-                const parsed =
-                  JSON.parse(savedData);
-
-
-                let usedLoops =
-                  Array.isArray(parsed.usedLoops)
-                    ? parsed.usedLoops
-                    : [];
-
-
-                // Find loops that haven't been used
-                let unusedLoops =
-                  Array.from(
-                    {
-                      length: TOTAL_LOOPS,
-                    },
-                    (_, index) => index
-                  ).filter(
-                    (index) =>
-                      !usedLoops.includes(index)
-                  );
-
-
-                // ==================================
-                // ALL 100 LOOPS FINISHED
-                // CREATE COMPLETELY NEW CYCLE
-                // ==================================
-
-                if (
-                  unusedLoops.length === 0
-                ) {
-
-                  const freshLoops =
-                    generateAllLoops();
-
-
-                  const randomLoop =
-                    Math.floor(
-                      Math.random() *
-                        TOTAL_LOOPS
-                    );
-
-
-                  const randomIndex =
-                    Math.floor(
-                      Math.random() *
-                        NUMBERS_PER_LOOP
-                    );
-
-
-                  setCounterLoops(
-                    freshLoops
-                  );
-
-                  setActiveLoop(
-                    randomLoop
-                  );
-
-
-                  setCounterIndex(
-                    randomIndex
-                  );
-
-
-                  localStorage.setItem(
-                    STORAGE_KEY,
-                    JSON.stringify({
-                      loops: freshLoops,
-                      usedLoops: [
-                        randomLoop,
-                      ],
-                      currentLoop:
-                        randomLoop,
-                      currentIndex:
-                        randomIndex,
-                    })
-                  );
-
-
-                  return randomIndex;
-                }
-
-
-                // ==================================
-                // SELECT RANDOM UNUSED LOOP
-                // ==================================
-
-                nextLoop =
-                  unusedLoops[
-                    Math.floor(
-                      Math.random() *
-                        unusedLoops.length
-                    )
-                  ];
-
-
-                usedLoops = [
-                  ...usedLoops,
-                  nextLoop,
-                ];
-
-
-                // ==================================
-                // RANDOM START NUMBER
-                // ==================================
-
-                const randomStart =
-                  Math.floor(
-                    Math.random() *
-                      NUMBERS_PER_LOOP
-                  );
-
-
-                setActiveLoop(
-                  nextLoop
-                );
-
-
-                localStorage.setItem(
-                  STORAGE_KEY,
-                  JSON.stringify({
-                    ...parsed,
-                    usedLoops,
-                    currentLoop:
-                      nextLoop,
-                    currentIndex:
-                      randomStart,
-                  })
-                );
-
-
-                return randomStart;
-
-              }
-
-            } catch (error) {
-
-              console.error(
-                'Counter loop error:',
-                error
-              );
-
-            }
-
-
-            return 0;
-
-          }
-        );
-
-      }, CHANGE_INTERVAL);
-
-
-    return () =>
-      clearInterval(interval);
-
-  }, [
-    counterLoops,
-    activeLoop,
-  ]);
-
-
-  // ==========================================
-  // CURRENT NUMBER
-  // ==========================================
-
-  const currentNumber =
-    counterLoops.length > 0 &&
-    counterLoops[activeLoop] &&
-    counterLoops[activeLoop][counterIndex]
-      !== undefined
-      ? counterLoops[
-          activeLoop
-        ][counterIndex]
-      : null;
-
-
-  // ==========================================
+// ==========================================
   // RETURN
   // ==========================================
 
@@ -711,26 +182,34 @@ export default function Hero() {
           LEFT ORANGE GLOW
       ====================================== */}
 
-      <motion.div
-        style={{
-          x: tx1,
-          y: ty1,
-        }}
-        className="
-          animate-float
-          pointer-events-none
-          absolute
-          -left-32
-          top-24
-          h-[420px]
-          w-[420px]
-          rounded-full
-          bg-gradient-to-br
-          from-brand-orange/30
-          to-brand-red/10
-          blur-[120px]
-        "
-      />
+<motion.div
+  style={{
+    x: tx1,
+    y: ty1,
+  }}
+  animate={{
+    opacity: [0.18, 0.38, 0.18],
+  }}
+  transition={{
+    duration: 5,
+    repeat: Infinity,
+    ease: 'easeInOut',
+  }}
+  className="
+    animate-float
+    pointer-events-none
+    absolute
+    -left-32
+    top-24
+    h-[420px]
+    w-[420px]
+    rounded-full
+    bg-gradient-to-br
+    from-brand-orange/30
+    to-brand-red/10
+    blur-[120px]
+  "
+/>
 
 
       {/* ======================================
@@ -742,6 +221,14 @@ export default function Hero() {
           x: tx2,
           y: ty2,
         }}
+        animate={{
+          opacity: [0.55, 1, 0.55],
+        }}
+        transition={{
+          duration: 5,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
         className="
           pointer-events-none
           absolute
@@ -749,8 +236,8 @@ export default function Hero() {
           top-0
           h-[900px]
           w-[900px]
-          translate-x-1/2
-          animate-glow
+          translate-y-4
+          animate-glowa
           bg-gradient-to-bl
           from-orange-500/100
           via-orange-500/70
@@ -778,7 +265,12 @@ export default function Hero() {
         }}
         transition={{
           duration: 0.7,
-          ease: [0.22, 1, 0.36, 1],
+          ease: [
+            0.22,
+            1,
+            0.36,
+            1,
+          ],
         }}
         whileHover={{
           scale: 1.04,
@@ -825,6 +317,7 @@ export default function Hero() {
         ) : (
 
           <>
+
             <Sparkles
               size={14}
               className="text-brand-orange"
@@ -843,6 +336,7 @@ export default function Hero() {
                 bg-brand-orange
               "
             />
+
           </>
 
         )}
@@ -1148,50 +642,6 @@ export default function Hero() {
             "
           >
 
-            {/* ORANGE LIVE DOT */}
-
-            <span
-              className="
-                relative
-                flex
-                h-2
-                w-2
-                shrink-0
-                items-center
-                justify-center
-              "
-            >
-
-              <span
-                className="
-                  absolute
-                  h-2
-                  w-2
-                  animate-ping
-                  rounded-full
-                  bg-brand-orange/30
-                "
-              />
-
-              <span
-                className="
-                  relative
-                  h-1.5
-                  w-1.5
-                  rounded-full
-                  bg-brand-orange
-                "
-                style={{
-                  boxShadow:
-                    '0 0 8px rgba(249,115,22,0.8)',
-                }}
-              />
-
-            </span>
-
-
-            {/* COUNTER TEXT */}
-
             <p
               className="
                 whitespace-nowrap
@@ -1200,48 +650,20 @@ export default function Hero() {
                 leading-none
                 text-black/55
                 sm:text-xs
+                lg:text-base
               "
             >
-
-              <motion.span
-                key={`${activeLoop}-${counterIndex}`}
-                initial={{
-                  opacity: 0.4,
-                  y: 2,
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                transition={{
-                  duration: 0.25,
-                }}
-                className="
-                  font-semibold
-                  tabular-nums
-                  text-black/75
-                "
-              >
-                {currentNumber !== null
-                  ? currentNumber.toLocaleString()
-                  : '—'}
-              </motion.span>
-
-
-              <span className="ml-1 text-brand-orange">
-                people are exploring Havelent
+              <span className="text-brand-orange">
+                People are exploring Havelent
               </span>
-
 
               <span className="mx-1.5 text-brand-orange">
                 ·
               </span>
 
-
               <span className="font-semibold text-black/70">
                 You are one of them.
               </span>
-
             </p>
 
           </div>
