@@ -172,6 +172,11 @@ export default function Services() {
      {/* Right Glow */}
   <div className="pointer-events-none absolute right-[-140px] top-1/2 -translate-y-1/2 z-0 h-[420px] w-[420px] rounded-full bg-gradient-to-bl from-orange-500/70 via-orange-500/35 to-transparent blur-[180px] animate-glow" />
   <div className="pointer-events-none absolute right-[-240px] top-1/2 -translate-y-1/2 z-0 h-[420px] w-[420px] rounded-full bg-orange-500/80 blur-[160px] animate-glow" />
+
+
+
+
+  
       
       <div className="relative z-10 mx-auto max-w-7xl">
         {/* Header */}

@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Sun, Moon } from "lucide-react";
 import { usePathname, useRouter } from 'next/navigation';
+import { useTheme } from "./ThemeProvider";
 
 const LINKS = ['Home', 'Our Work', 'Services', 'About', 'Contact Us'];
 
@@ -15,6 +16,7 @@ const SECTION_MAP: Record<string, string> = {
 };
 
 export default function Navbar() {
+  const { theme, toggleTheme } = useTheme();
   const [active, setActive] = useState('Home');
   const router = useRouter();
   const pathname = usePathname();
@@ -362,6 +364,32 @@ export default function Navbar() {
 
         {/* Desktop actions */}
         <div className="hidden items-center gap-3 md:flex">
+
+<motion.button
+  onClick={toggleTheme}
+  whileHover={{ scale: 1.05 }}
+  whileTap={{ scale: 0.95 }}
+  aria-label={
+    theme === "dark"
+      ? "Switch to Warm Charcoal"
+      : "Switch to Dark Mode"
+  }
+  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white transition-all duration-300 hover:border-orange-500/40 hover:text-orange-400"
+>
+{theme === 'dark' ? (
+  <Moon
+    size={16}
+    strokeWidth={1.8}
+  />
+) : (
+  <Sun
+    size={16}
+    strokeWidth={1.8}
+  />
+)}
+</motion.button>
+
+
           <motion.button
             initial={{
               opacity: 0,

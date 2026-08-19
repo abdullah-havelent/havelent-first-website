@@ -1,5 +1,7 @@
 'use client';
 
+import { useTheme } from '@/components/ThemeProvider';
+
 const ITEMS = [
   'CREATIVE',
   'CINEMATIC',
@@ -12,21 +14,59 @@ const ITEMS = [
 ];
 
 export default function Marquee() {
+  const { theme } = useTheme();
+
   const loop = [...ITEMS, ...ITEMS];
 
   return (
-    <section className="relative w-full overflow-x-hidden overflow-y-visible border-y border-black/10 py-5">
+    <section
+      className="
+        relative
+        left-1/2
+        w-screen
+        -translate-x-1/2
+        overflow-x-hidden
+        overflow-y-visible
+        border-y
+        border-black/10
+        py-5
+      "
+    >
       <div
-  className="flex whitespace-nowrap animate-marquee"
-  style={{ width: "max-content", willChange: "transform" }}
->
+        className="
+          flex
+          whitespace-nowrap
+          animate-marquee
+        "
+        style={{
+          width: 'max-content',
+          willChange: 'transform',
+        }}
+      >
         {loop.map((item, i) => (
           <div
             key={i}
-            className="mx-8 flex items-center gap-8 text-sm font-semibold tracking-[0.08em] text-black/70 uppercase"
+            className={`
+              mx-8
+              flex
+              items-center
+              gap-8
+              text-sm
+              font-semibold
+              tracking-[0.08em]
+              uppercase
+              ${
+                theme === 'charcoal'
+                  ? 'text-white'
+                  : 'text-black/70'
+              }
+            `}
           >
             <span>{item}</span>
-            <span className="text-brand-orange text-2xl">•</span>
+
+            <span className="text-2xl text-brand-orange">
+              •
+            </span>
           </div>
         ))}
       </div>

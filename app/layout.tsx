@@ -2,6 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Inter, Playfair_Display } from 'next/font/google';
 import ClientRoot from "@/components/ClientRoot";
+import ThemeProvider from "@/components/ThemeProvider";
 import { League_Spartan } from "next/font/google";
 
 
@@ -49,9 +50,13 @@ export default function RootLayout({
 <body
   className={`${inter.variable} ${playfair.variable} ${leagueSpartan.variable}`}
 >
+  
+<ThemeProvider>
   <ClientRoot>
     {children}
   </ClientRoot>
+</ThemeProvider>
+
 </body>
 
     </html>
