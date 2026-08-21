@@ -45,11 +45,35 @@ const projects = [
     category: 'Healthcare',
     images: ['/images/work/healthcare.webp'],
   },
+
+  // NEW — High-End Furniture
+  {
+    title: 'High-End Furniture',
+    category: 'Luxury Interiors',
+    images: [
+      '/images/work/High-End Furniture 1.webp',
+      '/images/work/High-End Furniture 2.webp',
+      '/images/work/High-End Furniture 3.webp',
+      '/images/work/High-End Furniture 4.webp',
+    ],
+  },
+
+  // NEW — Men's Accessories
+  {
+    title: "Men's Accessories",
+    category: 'Luxury Fashion',
+    images: [
+      '/images/work/MEN’S 1 .webp',
+      '/images/work/MEN’S 2 .webp',
+      '/images/work/MEN’S 3.webp',
+      '/images/work/MEN’S 4.webp',
+    ],
+  },
 ];
 
 /*
   Viewer projects:
-  Healthcare is the Featured Project,
+  Healthcare remains the Featured Project,
   then all normal portfolio cards follow.
 */
 const viewerProjects = [
@@ -59,6 +83,8 @@ const viewerProjects = [
   },
   ...projects,
 ];
+
+
 
 export default function OurWork() {
   const [selectedImages, setSelectedImages] = useState<string[]>([]);

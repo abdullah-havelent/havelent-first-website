@@ -47,6 +47,13 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
 
 
+<link
+  rel="preload"
+  href="/logos/logo.svg"
+  as="image"
+  type="image/svg+xml"
+/>
+
 <body
   className={`${inter.variable} ${playfair.variable} ${leagueSpartan.variable}`}
 >

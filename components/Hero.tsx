@@ -20,7 +20,6 @@ import RotatingTriangle from '@/components/RotatingTriangle';
 import RotatingSquare from '@/components/RotatingSquare';
 import { useTheme } from '@/components/ThemeProvider';
 
-
 // ==========================================
 // HERO HEADING
 // ==========================================
@@ -31,7 +30,6 @@ const headingWords = [
   { text: 'Our', color: 'white' },
   { text: 'Responsibility.', color: 'gradient' },
 ];
-
 
 // ==========================================
 // HERO COMPONENT
@@ -87,7 +85,6 @@ export default function Hero() {
       (v) => `${v * -8}px`
     );
 
-
   const onMouseMove = (
     e: React.MouseEvent
   ) => {
@@ -108,7 +105,6 @@ export default function Hero() {
     );
   };
 
-
   // ==========================================
   // CLICK TO REVEAL
   // ==========================================
@@ -123,7 +119,6 @@ export default function Hero() {
     setRevealed,
   ] = React.useState(false);
 
-
   const handleReveal = () => {
     setRevealed(true);
 
@@ -132,10 +127,9 @@ export default function Hero() {
     );
   };
 
-
-// ==========================================
-// RETURN
-// ==========================================
+  // ==========================================
+  // RETURN
+  // ==========================================
 
   return (
 
@@ -156,7 +150,6 @@ export default function Hero() {
       "
     >
 
-
       {/* ======================================
           ROTATING SHAPES
       ====================================== */}
@@ -164,7 +157,6 @@ export default function Hero() {
       <RotatingSquare />
 
       <RotatingTriangle />
-
 
       {/* ======================================
           BACKGROUND GRID
@@ -179,7 +171,6 @@ export default function Hero() {
           opacity-[0.08]
         "
       />
-
 
       {/* ======================================
           LEFT ORANGE GLOW
@@ -213,7 +204,6 @@ export default function Hero() {
           blur-[120px]
         "
       />
-
 
       {/* ======================================
           RIGHT ORANGE GLOW
@@ -249,14 +239,19 @@ export default function Hero() {
         "
       />
 
-
       <div className="noise" />
-
 
       {/* ======================================
           CINEMATIC ORANGE LIGHTNING STORM
-          ====================================== */}
+          
+          TEMPORARILY DISABLED FOR
+          PERFORMANCE TESTING.
+          
+          NOTHING INSIDE THIS BLOCK HAS
+          BEEN DELETED.
+      ====================================== */}
 
+      {/*
       <div
         className="
           pointer-events-none
@@ -266,7 +261,6 @@ export default function Hero() {
           overflow-hidden
         "
       >
-        {/* Soft storm clouds — only become visible around strikes */}
         <div className="storm-clouds">
           <div className="storm-cloud cloud-one" />
           <div className="storm-cloud cloud-two" />
@@ -274,12 +268,7 @@ export default function Hero() {
           <div className="storm-cloud cloud-four" />
         </div>
 
-        {/* Very subtle atmospheric flash */}
         <div className="storm-screen-flash" />
-
-        {/* ==================================
-            LIGHTNING 1 — CENTRAL / STRONG
-            ================================== */}
 
         <svg
           className="storm-bolt bolt-one"
@@ -349,10 +338,6 @@ export default function Hero() {
           </g>
         </svg>
 
-        {/* ==================================
-            LIGHTNING 2 — RIGHT / MEDIUM
-            ================================== */}
-
         <svg
           className="storm-bolt bolt-two"
           viewBox="0 0 500 900"
@@ -420,10 +405,6 @@ export default function Hero() {
           </g>
         </svg>
 
-        {/* ==================================
-            LIGHTNING 3 — LEFT / DISTANT
-            ================================== */}
-
         <svg
           className="storm-bolt bolt-three"
           viewBox="0 0 500 900"
@@ -487,10 +468,9 @@ export default function Hero() {
           </g>
         </svg>
 
-        {/* Subtle orange storm atmosphere */}
         <div className="storm-orange-glow" />
       </div>
-
+      */}
 
       {/* ======================================
           CLICK TO REVEAL
@@ -585,7 +565,6 @@ export default function Hero() {
 
       </motion.button>
 
-
       {/* ======================================
           HEADING
       ====================================== */}
@@ -662,7 +641,6 @@ export default function Hero() {
 
       </h1>
 
-
       {/* ======================================
           CTA
       ====================================== */}
@@ -689,7 +667,6 @@ export default function Hero() {
           sm:flex-row
         "
       >
-
 
         {/* START A PROJECT */}
 
@@ -765,7 +742,6 @@ export default function Hero() {
 
         </Link>
 
-
         {/* VIEW SERVICES */}
 
         <motion.button
@@ -811,7 +787,6 @@ export default function Hero() {
 
       </motion.div>
 
-
       {/* ======================================
           MARQUEE + LIVE ACTIVITY
       ====================================== */}
@@ -846,7 +821,6 @@ export default function Hero() {
           <Marquee />
 
         </motion.div>
-
 
         {/* ==================================
             LIVE ACTIVITY COUNTER
@@ -926,7 +900,6 @@ export default function Hero() {
         </motion.div>
 
       </div>
-
 
       {/* ======================================
           LIGHTNING ANIMATION STYLES

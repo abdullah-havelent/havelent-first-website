@@ -71,9 +71,10 @@ export default function FAQ() {
 
 
       {/* ========================================= */}
-      {/* ORANGE SNOW — ONLY NEW EFFECT */}
+      {/* ORANGE SNOW — TEMPORARILY DISABLED */}
       {/* ========================================= */}
 
+      {/*
       <div
         className="
           pointer-events-none
@@ -83,8 +84,6 @@ export default function FAQ() {
           overflow-hidden
         "
       >
-
-        {/* Large foreground snow */}
 
         <div className="absolute inset-0 overflow-hidden">
 
@@ -142,10 +141,6 @@ export default function FAQ() {
 
         </div>
 
-
-        {/* ========================================= */}
-        {/* MEDIUM SNOW */}
-        {/* ========================================= */}
 
         <div className="absolute inset-0 overflow-hidden">
 
@@ -213,10 +208,6 @@ export default function FAQ() {
         </div>
 
 
-        {/* ========================================= */}
-        {/* SMALL DISTANT SNOW */}
-        {/* ========================================= */}
-
         <div className="absolute inset-0 overflow-hidden">
 
           {Array.from({ length: 100 }, (_, i) => (
@@ -268,10 +259,6 @@ export default function FAQ() {
         </div>
 
 
-        {/* ========================================= */}
-        {/* SOFT ORANGE SNOW HAZE */}
-        {/* ========================================= */}
-
         <motion.div
           animate={{
             x: ['-8%', '8%', '-4%', '-8%'],
@@ -296,6 +283,7 @@ export default function FAQ() {
         />
 
       </div>
+      */}
 
 
       <div className="relative max-w-5xl mx-auto">
@@ -481,13 +469,10 @@ export default function FAQ() {
 
       {/* ========================================= */}
       {/* SNOW ANIMATIONS */}
+      {/* KEEPING KEYFRAMES — EFFECT IS DISABLED */}
       {/* ========================================= */}
 
       <style jsx>{`
-
-        /* ===================================== */
-        /* LARGE FOREGROUND SNOW */
-        /* ===================================== */
 
         @keyframes faqLargeSnow {
 
@@ -530,10 +515,6 @@ export default function FAQ() {
         }
 
 
-        /* ===================================== */
-        /* MEDIUM SNOW */
-        /* ===================================== */
-
         @keyframes faqMediumSnow {
 
           0% {
@@ -568,10 +549,6 @@ export default function FAQ() {
 
         }
 
-
-        /* ===================================== */
-        /* SMALL DISTANT SNOW */
-        /* ===================================== */
 
         @keyframes faqSmallSnow {
 

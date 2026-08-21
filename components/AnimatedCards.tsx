@@ -55,22 +55,20 @@ export default function AnimatedCards() {
           return (
             <motion.div
               key={service.title}
-              initial={{
-                opacity: 0,
-                x: -70,
-                y: 50,
-                rotate: -4,
-                scale: 0.92,
-                filter: 'blur(12px)',
-              }}
-              whileInView={{
-                opacity: 1,
-                x: 0,
-                y: 0,
-                rotate: 0,
-                scale: 1,
-                filter: 'blur(0px)',
-              }}
+initial={{
+  opacity: 0,
+  x: -70,
+  y: 50,
+  rotate: -4,
+  scale: 0.92,
+}}
+whileInView={{
+  opacity: 1,
+  x: 0,
+  y: 0,
+  rotate: 0,
+  scale: 1,
+}}
               viewport={{
                 once: true,
                 amount: 0.25,
@@ -90,9 +88,9 @@ export default function AnimatedCards() {
                 {/* CARD AMBIENT GLOW */}
                 {/* ================================================= */}
 
-                <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-orange-500/10 blur-[90px] transition-all duration-700 group-hover:bg-orange-500/20" />
+                <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-orange-500/10 blur-[60px] transition-all duration-700 group-hover:bg-orange-500/20" />
 
-                <div className="pointer-events-none absolute -bottom-24 -left-20 h-64 w-64 rounded-full bg-orange-500/[0.06] blur-[90px]" />
+                <div className="pointer-events-none absolute -bottom-24 -left-20 h-64 w-64 rounded-full bg-orange-500/[0.06] blur-[60px]" />
 
 
                 {/* ================================================= */}
@@ -229,7 +227,7 @@ export default function AnimatedCards() {
 
     {/* Glass Orb */}
 
-    <div className="relative flex h-[112px] w-[112px] items-center justify-center rounded-full border border-orange-500/30 bg-gradient-to-br from-white/[0.10] via-white/[0.035] to-orange-500/[0.08] shadow-[inset_0_1px_2px_rgba(255,255,255,0.15),0_0_35px_rgba(249,115,22,0.16)] backdrop-blur-xl transition-all duration-500 group-hover:scale-110 group-hover:border-orange-500/70 group-hover:shadow-[inset_0_1px_2px_rgba(255,255,255,0.2),0_0_55px_rgba(249,115,22,0.4)]">
+    <div className="relative flex h-[112px] w-[112px] items-center justify-center rounded-full border border-orange-500/30 bg-gradient-to-br from-white/[0.10] via-white/[0.035] to-orange-500/[0.08] shadow-[inset_0_1px_2px_rgba(255,255,255,0.15),0_0_35px_rgba(249,115,22,0.16)] transition-all duration-500 group-hover:scale-110 group-hover:border-orange-500/70 group-hover:shadow-[inset_0_1px_2px_rgba(255,255,255,0.2),0_0_55px_rgba(249,115,22,0.4)]">
 
       <Icon
         size={48}

@@ -14,22 +14,30 @@ export default function IntroProvider({
   useEffect(() => {
     setMounted(true);
 
+    const isMobile =
+      window.matchMedia("(max-width: 767px)").matches;
+
     // Mobile → Skip intro completely
-    if (window.innerWidth < 768) {
+    if (isMobile) {
       return;
     }
 
-    // Desktop → Show intro
+    // Laptop / Desktop → Show intro
     setShowIntro(true);
 
     const timer = setTimeout(() => {
       setShowIntro(false);
-    }, 2200);
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, []);
 
-  // Wait until hydration
+  // Mobile → render website immediately
+  if (mounted && window.matchMedia("(max-width: 767px)").matches) {
+    return <>{children}</>;
+  }
+
+  // Wait until hydration on desktop
   if (!mounted) {
     return null;
   }

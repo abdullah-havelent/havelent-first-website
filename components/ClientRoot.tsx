@@ -10,26 +10,29 @@ export default function ClientRoot({
 }: {
   children: React.ReactNode;
 }) {
-const [ready, setReady] = useState(false);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    // Mobile → Skip intro
-    if (window.innerWidth < 768) {
-      setReady(true);
-      return;
-    }
-
-    // Desktop → Show intro
+    // Mobile + Desktop → Intro first
     const timer = setTimeout(() => {
       setReady(true);
-    }, 2200);
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <>
-      <LoadingScreen show={!ready} />
+      {/* ========================================= */}
+      {/* INTRO */}
+      {/* ========================================= */}
+
+      {!ready && <LoadingScreen show={true} />}
+
+      {/* ========================================= */}
+      {/* WEBSITE */}
+      {/* RENDERS ONLY AFTER INTRO */}
+      {/* ========================================= */}
 
       {ready && (
         <>
