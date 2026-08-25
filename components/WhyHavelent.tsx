@@ -84,7 +84,7 @@ export default function WhyHavelent() {
         relative
         overflow-hidden
         px-6
-        pt-8
+        pt-28
         pb-24
       "
     >

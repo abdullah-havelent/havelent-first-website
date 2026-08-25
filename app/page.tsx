@@ -1,6 +1,5 @@
 'use client';
 
-
 import { useEffect } from 'react';
 
 import Hero from '@/components/Hero';
@@ -11,21 +10,23 @@ import Footer from '@/components/Footer';
 import WhyHavelent from '@/components/WhyHavelent';
 import FAQ from '@/components/FAQ';
 
-
-
-
-
 export default function Home() {
-    useEffect(() => {
+  useEffect(() => {
     document.title = 'Havelent — Premium Digital Agency';
   }, []);
+
   return (
     <>
       {/* HOME */}
       <Hero />
 
       {/* WHY HAVELENT */}
-      <WhyHavelent />
+      <div
+        id="our-work"
+        className="scroll-mt-28"
+      >
+        <WhyHavelent />
+      </div>
 
       {/* SERVICES */}
       <div

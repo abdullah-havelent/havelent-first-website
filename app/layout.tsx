@@ -1,16 +1,15 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter, Playfair_Display } from 'next/font/google';
-import ClientRoot from "@/components/ClientRoot";
-import ThemeProvider from "@/components/ThemeProvider";
-import { League_Spartan } from "next/font/google";
-
+import { Inter, Playfair_Display, League_Spartan } from 'next/font/google';
+import ClientRoot from '@/components/ClientRoot';
+import ThemeProvider from '@/components/ThemeProvider';
 
 const leagueSpartan = League_Spartan({
-  subsets: ["latin"],
-  weight: ["900"],
-  variable: "--font-league-spartan",
+  subsets: ['latin'],
+  weight: ['900'],
+  variable: '--font-league-spartan',
 });
+
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
@@ -28,6 +27,11 @@ export const metadata: Metadata = {
   title: 'Havelent — Premium Digital Agency',
   description:
     'Havelent is a luxury digital agency crafting cinematic digital experiences, brand systems, and interactive products for visionary brands.',
+
+  icons: {
+    icon: '/logos/main-gradient.svg',
+  },
+
   openGraph: {
     title: 'Havelent — Premium Digital Agency',
     description:
@@ -41,31 +45,20 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
-
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
-
-
-<link
-  rel="preload"
-  href="/logos/logo.svg"
-  as="image"
-  type="image/svg+xml"
-/>
-
-<body
-  className={`${inter.variable} ${playfair.variable} ${leagueSpartan.variable}`}
->
-  
-<ThemeProvider>
-  <ClientRoot>
-    {children}
-  </ClientRoot>
-</ThemeProvider>
-
-</body>
-
+    <html
+      lang="en"
+      className={`${inter.variable} ${playfair.variable}`}
+    >
+      <body
+        className={`${inter.variable} ${playfair.variable} ${leagueSpartan.variable}`}
+      >
+        <ThemeProvider>
+          <ClientRoot>
+            {children}
+          </ClientRoot>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

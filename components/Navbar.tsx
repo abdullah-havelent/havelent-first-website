@@ -9,7 +9,6 @@ import { useTheme } from './ThemeProvider';
 const LINKS = ['Home', 'Our Work', 'Services', 'About', 'Contact Us'];
 
 const SECTION_MAP: Record<string, string> = {
-  'Our Work': 'our-work',
   Services: 'services',
   About: 'about',
   'Contact Us': 'contact',
@@ -198,15 +197,9 @@ export default function Navbar() {
       setActive(activeLink);
     }
 
-    window.history.replaceState(
-      null,
-      '',
-      `#${sectionId}`
-    );
-
-    setTimeout(() => {
-      setManualNav(false);
-    }, 900);
+setTimeout(() => {
+  setManualNav(false);
+}, 900);
 
     return true;
   };
@@ -280,7 +273,29 @@ export default function Navbar() {
     }
 
     /*
-     * OUR WORK / SERVICES / ABOUT / CONTACT
+     * OUR WORK
+     *
+     * This is a REAL PAGE.
+     * It must NOT be treated as a
+     * Home section.
+     */
+if (link === 'Our Work') {
+  if (pathname === '/') {
+    scrollToSection('our-work');
+  } else {
+    sessionStorage.setItem(
+      'havelent-scroll-target',
+      'our-work'
+    );
+
+    router.push('/');
+  }
+
+  return;
+}
+
+    /*
+     * SERVICES / ABOUT / CONTACT
      */
     const sectionId = SECTION_MAP[link];
 
@@ -362,7 +377,6 @@ export default function Navbar() {
             : '0 4px 24px -6px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06)',
         }}
       >
-
         {/* ========================================= */}
         {/* BRAND */}
         {/* ========================================= */}
@@ -469,9 +483,7 @@ export default function Navbar() {
 
         <div className="hidden items-center gap-3 md:flex">
 
-          {/* ========================================= */}
           {/* DESKTOP THEME BUTTON */}
-          {/* ========================================= */}
 
           <motion.button
             initial={{
@@ -520,9 +532,6 @@ export default function Navbar() {
               hover:text-orange-400
             "
           >
-
-            {/* Soft hover glow */}
-
             <motion.span
               className="
                 absolute
@@ -542,8 +551,6 @@ export default function Navbar() {
                 duration: 0.3,
               }}
             />
-
-            {/* Animated Sun / Moon */}
 
             <AnimatePresence
               mode="wait"
@@ -591,12 +598,9 @@ export default function Navbar() {
                 )}
               </motion.span>
             </AnimatePresence>
-
           </motion.button>
 
-          {/* ========================================= */}
           {/* GET A QUOTE */}
-          {/* ========================================= */}
 
           <motion.button
             initial={{
@@ -840,7 +844,6 @@ export default function Navbar() {
               md:hidden
             "
           >
-
             {LINKS.map((link, index) => (
               <motion.button
                 key={link}
@@ -933,7 +936,6 @@ export default function Navbar() {
                 />
               </motion.button>
             </div>
-
           </motion.div>
         )}
       </AnimatePresence>
