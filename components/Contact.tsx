@@ -214,7 +214,7 @@ export default function Contact() {
                   },
                   {
                     icon: Phone,
-                    label: '+1 (415) 555-0142',
+                    label: '+351-920-687-892',
                   },
                   {
                     icon: MapPin,
