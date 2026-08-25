@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 function escapeHtml(text: string) {
   return text
     .replace(/&/g, "&amp;")
@@ -25,6 +23,22 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
+
+    // Make sure the Resend API key exists before creating the client.
+    if (!process.env.RESEND_API_KEY) {
+      console.error("RESEND_API_KEY is not configured.");
+
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Email service is not configured.",
+        },
+        { status: 500 }
+      );
+    }
+
+    // Create Resend client only when the API route is actually called.
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     const safeName = escapeHtml(name?.trim() || "Website visitor");
     const safeEmail = escapeHtml(email.trim());

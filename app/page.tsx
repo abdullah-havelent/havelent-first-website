@@ -1,5 +1,8 @@
 'use client';
 
+
+import { useEffect } from 'react';
+
 import Hero from '@/components/Hero';
 import Services from '@/components/Services';
 import About from '@/components/About';
@@ -8,7 +11,14 @@ import Footer from '@/components/Footer';
 import WhyHavelent from '@/components/WhyHavelent';
 import FAQ from '@/components/FAQ';
 
+
+
+
+
 export default function Home() {
+    useEffect(() => {
+    document.title = 'Havelent — Premium Digital Agency';
+  }, []);
   return (
     <>
       {/* HOME */}
