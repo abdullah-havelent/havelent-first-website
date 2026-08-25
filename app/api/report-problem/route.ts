@@ -14,76 +14,86 @@ function escapeHtml(text: string) {
 
 export async function POST(req: Request) {
   try {
-    const { name, email, company, message } = await req.json();
+    const { name, email, message } = await req.json();
 
-    if (!name?.trim() || !email?.trim() || !message?.trim()) {
+    if (!email?.trim() || !message?.trim()) {
       return NextResponse.json(
         {
           success: false,
-          message: "Please fill in all required fields.",
+          message: "Please provide your email and describe the problem.",
         },
         { status: 400 }
       );
     }
 
-    const safeName = escapeHtml(name.trim());
+    const safeName = escapeHtml(name?.trim() || "Website visitor");
     const safeEmail = escapeHtml(email.trim());
-    const safeCompany = escapeHtml(company?.trim() || "Not provided");
     const safeMessage = escapeHtml(message.trim());
 
-    // 1. Send inquiry to Havelent
+    // 1. Send problem report to Havelent
     const notification = await resend.emails.send({
       from: "Abdullah | Havelent <abdullah@havelent.com>",
       to: "abdullah@havelent.com",
       replyTo: email.trim(),
-      subject: `New Project Inquiry — ${name.trim()}`,
+      subject: "New Website Problem Report",
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #222;">
-          <h2 style="margin-bottom: 20px;">New Project Inquiry</h2>
+          <h2>New Website Problem Report</h2>
 
-          <p><strong>Name:</strong> ${safeName}</p>
+          <p><strong>Reported by:</strong> ${safeName}</p>
 
           <p><strong>Email:</strong> ${safeEmail}</p>
 
-          <p><strong>Company:</strong> ${safeCompany}</p>
+          <p><strong>Problem:</strong></p>
 
-          <p><strong>Message:</strong></p>
-
-          <p style="white-space: pre-wrap; background: #f5f5f5; padding: 15px; border-radius: 8px;">
+          <p style="
+            white-space: pre-wrap;
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+          ">
             ${safeMessage}
           </p>
 
-          <hr style="margin: 25px 0; border: none; border-top: 1px solid #ddd;" />
+          <hr style="
+            margin: 25px 0;
+            border: none;
+            border-top: 1px solid #ddd;
+          " />
 
           <p style="font-size: 13px; color: #777;">
-            This message was submitted through the Havelent website.
+            This problem report was submitted through the Havelent website.
           </p>
         </div>
       `,
     });
 
-    // 2. Send automatic confirmation to the client
+    // 2. Automatic confirmation to the person reporting the problem
     const autoReply = await resend.emails.send({
       from: "Abdullah | Havelent <abdullah@havelent.com>",
       to: email.trim(),
-      subject: "We've received your message — Havelent",
+      subject: "We've received your report — Havelent",
       html: `
-        <div style="font-family: Arial, sans-serif; line-height: 1.7; color: #222; max-width: 600px; margin: 0 auto;">
+        <div style="
+          font-family: Arial, sans-serif;
+          line-height: 1.7;
+          color: #222;
+          max-width: 600px;
+          margin: 0 auto;
+        ">
 
-          <h2 style="margin-bottom: 20px;">
-            Thank you for reaching out to Havelent.
-          </h2>
+          <h2>We've received your report.</h2>
 
           <p>Hi ${safeName},</p>
 
           <p>
-            We've received your message and appreciate you taking the time
-            to tell us about your project.
+            Thank you for taking the time to report an issue with the
+            Havelent website.
           </p>
 
           <p>
-            Our team will review your project details and get back to you
-            within one business day.
+            We've received your report and will review the issue as soon
+            as possible.
           </p>
 
           <div style="
@@ -93,7 +103,7 @@ export async function POST(req: Request) {
             border-radius: 10px;
           ">
             <p style="margin: 0 0 8px;">
-              <strong>Your message:</strong>
+              <strong>Your report:</strong>
             </p>
 
             <p style="margin: 0; white-space: pre-wrap;">
@@ -126,7 +136,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         success: false,
-        message: "Failed to send message.",
+        message: "Failed to send problem report.",
       },
       { status: 500 }
     );

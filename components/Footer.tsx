@@ -6,7 +6,7 @@ import {
   motion,
   AnimatePresence,
 } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, X } from 'lucide-react';
 
 const COMPANY_LINKS = [
   {
@@ -81,6 +81,21 @@ const SERVICE_GROUPS = [
 export default function Footer() {
   const [openGroup, setOpenGroup] =
     useState<string | null>(null);
+
+  const [reportOpen, setReportOpen] =
+    useState(false);
+
+  const [reportMessage, setReportMessage] =
+    useState('');
+
+  const [reportEmail, setReportEmail] =
+    useState('');
+
+  const [reportLoading, setReportLoading] =
+    useState(false);
+
+  const [reportSent, setReportSent] =
+    useState(false);
 
   const pathname = usePathname();
 
@@ -215,29 +230,29 @@ export default function Footer() {
            * CUSTOM SCROLL CONTAINER
            * ==========================================
            */
-else if (
-  scrollParent instanceof HTMLElement
-) {
-  const parentRect =
-    scrollParent.getBoundingClientRect();
+          else if (
+            scrollParent instanceof HTMLElement
+          ) {
+            const parentRect =
+              scrollParent.getBoundingClientRect();
 
-  const elementRect =
-    element.getBoundingClientRect();
+            const elementRect =
+              element.getBoundingClientRect();
 
-  const target =
-    scrollParent.scrollTop +
-    (elementRect.top -
-      parentRect.top) -
-    navOffset;
+            const target =
+              scrollParent.scrollTop +
+              (elementRect.top -
+                parentRect.top) -
+              navOffset;
 
-  scrollParent.scrollTo({
-    top: Math.max(
-      0,
-      target
-    ),
-    behavior: 'smooth',
-  });
-}
+            scrollParent.scrollTo({
+              top: Math.max(
+                0,
+                target
+              ),
+              behavior: 'smooth',
+            });
+          }
 
 
           /*
@@ -273,20 +288,6 @@ else if (
    * ====================================================
    * HANDLE HASH AFTER PAGE LOAD
    * ====================================================
-   *
-   * This is important when:
-   *
-   * Service Page
-   *      ↓
-   * Footer → Services
-   *      ↓
-   * Homepage loads
-   *      ↓
-   * #services
-   *      ↓
-   * Footer finds it
-   *      ↓
-   * Scroll
    */
   useEffect(() => {
     if (
@@ -372,9 +373,6 @@ else if (
      * ==========================================
      * INNER PAGE
      * ==========================================
-     *
-     * Full browser navigation guarantees
-     * the homepage is loaded first.
      */
     window.location.href =
       `/#${section}`;
@@ -398,6 +396,67 @@ else if (
   };
 
 
+  /*
+   * ====================================================
+   * REPORT A PROBLEM
+   * ====================================================
+   */
+  const handleReportSubmit = async (
+    e: React.FormEvent
+  ) => {
+    e.preventDefault();
+
+    if (!reportEmail.trim() || !reportMessage.trim()) {
+      return;
+    }
+
+    setReportLoading(true);
+
+    try {
+      const res = await fetch(
+        '/api/report-problem',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type':
+              'application/json',
+          },
+          body: JSON.stringify({
+            name: 'Website Visitor',
+            email: reportEmail,
+            message: reportMessage,
+          }),
+        }
+      );
+
+      const data =
+        await res.json();
+
+      if (data.success) {
+        setReportSent(true);
+        setReportMessage('');
+        setReportEmail('');
+
+        setTimeout(() => {
+          setReportSent(false);
+          setReportOpen(false);
+        }, 2000);
+      } else {
+        alert(
+          'Failed to submit report.'
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      alert(
+        'Something went wrong.'
+      );
+    }
+
+    setReportLoading(false);
+  };
+
+
   return (
     <footer
       className="
@@ -408,6 +467,29 @@ else if (
         py-16
       "
     >
+      {/* REPORT A PROBLEM — TOP RIGHT */}
+      <button
+        type="button"
+        onClick={() =>
+          setReportOpen(true)
+        }
+        data-cursor="button"
+        className="
+          absolute
+          right-6
+          top-5
+          z-20
+          text-xs
+          font-medium
+          text-white/45
+          transition-colors
+          duration-300
+          hover:text-brand-orange
+        "
+      >
+        Report a Problem
+      </button>
+
       <div
         className="
           mx-auto
@@ -1121,7 +1203,7 @@ else if (
         >
 
           <span>
-            © {new Date().getFullYear()} Havelent Studio.
+            © {new Date().getFullYear()} Havelent.
             All rights reserved.
           </span>
 
@@ -1132,6 +1214,270 @@ else if (
         </motion.div>
 
       </div>
+
+
+      {/* ========================================= */}
+      {/* REPORT A PROBLEM MODAL */}
+      {/* ========================================= */}
+
+      <AnimatePresence>
+        {reportOpen && (
+          <motion.div
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            className="
+              fixed
+              inset-0
+              z-[100]
+              flex
+              items-center
+              justify-center
+              bg-black/70
+              px-6
+              backdrop-blur-md
+            "
+            onClick={() =>
+              setReportOpen(false)
+            }
+          >
+            <motion.div
+              initial={{
+                opacity: 0,
+                y: 25,
+                scale: 0.96,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                scale: 1,
+              }}
+              exit={{
+                opacity: 0,
+                y: 25,
+                scale: 0.96,
+              }}
+              transition={{
+                duration: 0.3,
+              }}
+              onClick={(e) =>
+                e.stopPropagation()
+              }
+              className="
+                relative
+                w-full
+                max-w-lg
+                overflow-hidden
+                rounded-[1.5rem]
+                border
+                border-white/[0.15]
+                bg-[#0b0b0b]/95
+                p-7
+                shadow-[0_30px_100px_-30px_rgba(0,0,0,0.95)]
+                backdrop-blur-[30px]
+              "
+            >
+
+              {/* Orange Glow */}
+              <div
+                aria-hidden="true"
+                className="
+                  pointer-events-none
+                  absolute
+                  -right-24
+                  -top-24
+                  h-48
+                  w-48
+                  rounded-full
+                  bg-brand-orange/20
+                  blur-[80px]
+                "
+              />
+
+              {/* Close */}
+              <button
+                type="button"
+                onClick={() =>
+                  setReportOpen(false)
+                }
+                data-cursor="button"
+                className="
+                  absolute
+                  right-5
+                  top-5
+                  z-20
+                  flex
+                  h-8
+                  w-8
+                  items-center
+                  justify-center
+                  rounded-full
+                  border
+                  border-white/10
+                  bg-white/5
+                  text-white/50
+                  transition-colors
+                  hover:text-white
+                "
+                aria-label="Close"
+              >
+                <X size={16} />
+              </button>
+
+              <div className="relative z-10">
+
+                <span
+                  className="
+                    text-xs
+                    font-medium
+                    uppercase
+                    tracking-[0.2em]
+                    text-brand-orange
+                  "
+                >
+                  Website Feedback
+                </span>
+
+                <h3
+                  className="
+                    mt-3
+                    font-display
+                    text-2xl
+                    font-semibold
+                    text-white
+                  "
+                >
+                  Report a Problem
+                </h3>
+
+                <p
+                  className="
+                    mt-2
+                    text-sm
+                    leading-relaxed
+                    text-white/50
+                  "
+                >
+                  Found something that isn't working correctly?
+                  Let us know. Please include your email address so our team
+                  can follow up, discuss the issue with you, and make sure
+                  everything is resolved to your satisfaction.
+                </p>
+
+                <form
+                  onSubmit={
+                    handleReportSubmit
+                  }
+                  className="
+                    mt-6
+                    flex
+                    flex-col
+                    gap-4
+                  "
+                >
+
+                  <input
+                    required
+                    type="email"
+                    value={reportEmail}
+                    onChange={(e) =>
+                      setReportEmail(
+                        e.target.value
+                      )
+                    }
+                    placeholder="Your email address"
+                    className="
+                      rounded-xl
+                      border
+                      border-white/10
+                      bg-white/5
+                      px-4
+                      py-3
+                      text-sm
+                      text-white
+                      placeholder:text-white/35
+                      outline-none
+                      transition-colors
+                      focus:border-brand-orange
+                    "
+                  />
+
+                  <textarea
+                    required
+                    rows={6}
+                    value={
+                      reportMessage
+                    }
+                    onChange={(e) =>
+                      setReportMessage(
+                        e.target.value
+                      )
+                    }
+                    placeholder="Tell us what went wrong..."
+                    className="
+                      resize-none
+                      rounded-xl
+                      border
+                      border-white/10
+                      bg-white/5
+                      px-4
+                      py-3
+                      text-sm
+                      text-white
+                      placeholder:text-white/35
+                      outline-none
+                      transition-colors
+                      focus:border-brand-orange
+                    "
+                  />
+
+                  <button
+                    type="submit"
+                    disabled={
+                      reportLoading ||
+                      reportSent
+                    }
+                    data-cursor="button"
+                    className="
+                      inline-flex
+                      items-center
+                      justify-center
+                      rounded-xl
+                      bg-gradient-to-r
+                      from-brand-accent
+                      to-brand-orange
+                      px-6
+                      py-3.5
+                      text-sm
+                      font-semibold
+                      text-white
+                      transition-opacity
+                      disabled:cursor-not-allowed
+                      disabled:opacity-60
+                    "
+                  >
+                    {reportLoading
+                      ? 'Submitting...'
+                      : reportSent
+                        ? 'Report submitted'
+                        : 'Submit Report'}
+                  </button>
+
+                </form>
+
+              </div>
+
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </footer>
   );
 }
