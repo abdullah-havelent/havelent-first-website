@@ -24,20 +24,37 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: 'Havelent — Premium Digital Agency',
+  metadataBase: new URL('https://havelent.com'),
+
+  title: 'Havelent | Video Editing, Graphic Design & Digital Marketing',
+
   description:
-    'Havelent is a luxury digital agency crafting cinematic digital experiences, brand systems, and interactive products for visionary brands.',
+    'Havelent provides video editing, graphic design, digital marketing, and social media management for modern brands.',
+
+  alternates: {
+    canonical: './',
+  },
 
   icons: {
     icon: '/logos/main-gradient.svg',
   },
 
-  openGraph: {
-    title: 'Havelent — Premium Digital Agency',
-    description:
-      'Your Vision, Our Responsibility. Cinematic digital experiences for visionary brands.',
-    type: 'website',
-  },
+openGraph: {
+  title: 'Havelent | Video Editing, Graphic Design & Digital Marketing',
+  description:
+    'Havelent provides video editing, graphic design, digital marketing, and social media management for modern brands.',
+  url: 'https://havelent.com',
+  siteName: 'Havelent',
+  type: 'website',
+  images: [
+    {
+      url: '/og-image.png',
+      width: 1200,
+      height: 630,
+      alt: 'Havelent — Creative Digital Services',
+    },
+  ],
+},
 };
 
 export default function RootLayout({
