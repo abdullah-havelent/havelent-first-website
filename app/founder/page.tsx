@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { Linkedin } from 'lucide-react';
 import Footer from '@/components/Footer';
 
 export default function FounderPage() {
@@ -13,7 +14,12 @@ export default function FounderPage() {
     image:
       'https://havelent.com/images/ceo-of-havelent-abdullah-rajpoot.webp',
     url: 'https://havelent.com/founder',
-    email: 'abdullah@havelent.com',
+        email: 'abdullah@havelent.com',
+
+    sameAs: [
+      'https://www.linkedin.com/in/abdullah-rajpoot-havelent/',
+    ],
+
     worksFor: {
       '@type': 'Organization',
       name: 'Havelent',
@@ -73,6 +79,26 @@ return (
                 abdullah@havelent.com
               </a>
             </p>
+
+
+
+<p className="mt-3 max-w-xl">
+  <a
+    href="https://www.linkedin.com/in/abdullah-rajpoot-havelent/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="inline-flex items-center gap-2 text-white/70 transition-colors duration-300 hover:text-brand-orange"
+  >
+    <Linkedin
+      size={30}
+      strokeWidth={1.8}
+      className="transition-colors duration-300"
+    />
+    
+  </a>
+</p>
+
+
 
             <div className="mt-10 flex flex-wrap gap-4">
               <Link
