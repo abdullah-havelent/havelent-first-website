@@ -5,7 +5,31 @@ import Link from 'next/link';
 import Footer from '@/components/Footer';
 
 export default function FounderPage() {
-  return (
+  const founderSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Abdullah Rajpoot',
+    jobTitle: 'Founder & CEO',
+    image:
+      'https://havelent.com/images/ceo-of-havelent-abdullah-rajpoot.webp',
+    url: 'https://havelent.com/founder',
+    email: 'abdullah@havelent.com',
+    worksFor: {
+      '@type': 'Organization',
+      name: 'Havelent',
+      url: 'https://havelent.com',
+    },
+  };
+
+return (
+  <>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(founderSchema),
+      }}
+    />
+
     <main className="relative overflow-hidden bg-brand-dark text-white">
 
       {/* Hero */}
@@ -317,5 +341,6 @@ export default function FounderPage() {
       <Footer />
 
     </main>
+    </>
   );
 }

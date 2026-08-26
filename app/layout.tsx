@@ -70,11 +70,37 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${playfair.variable} ${leagueSpartan.variable}`}
       >
-        <ThemeProvider>
-          <ClientRoot>
-            {children}
-          </ClientRoot>
-        </ThemeProvider>
+<ThemeProvider>
+  <script
+    type="application/ld+json"
+    dangerouslySetInnerHTML={{
+      __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'Havelent',
+        url: 'https://havelent.com',
+        logo: 'https://havelent.com/logos/main-gradient.svg',
+        founder: {
+          '@type': 'Person',
+          name: 'Abdullah Rajpoot',
+          jobTitle: 'Founder & CEO',
+          url: 'https://havelent.com/founder',
+          image:
+            'https://havelent.com/images/ceo-of-havelent-abdullah-rajpoot.webp',
+          worksFor: {
+            '@type': 'Organization',
+            name: 'Havelent',
+            url: 'https://havelent.com',
+          },
+        },
+      }),
+    }}
+  />
+
+  <ClientRoot>
+    {children}
+  </ClientRoot>
+</ThemeProvider>
       </body>
     </html>
   );
