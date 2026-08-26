@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   },
 
   icons: {
-    icon: '/logos/main-gradient.svg',
+    icon: '/favicon-192.png',
   },
 
 openGraph: {

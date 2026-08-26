@@ -54,12 +54,12 @@ return (
               Founder & CEO
             </span>
 
-            <h1 className="mt-5 font-display text-[clamp(2.8rem,6vw,5rem)] font-semibold leading-tight">
-              The Story Behind{' '}
-              <span className="text-gradient-orange">
-                Havelent.
-              </span>
-            </h1>
+            <h1 className="mt-5 font-display text-[clamp(2.8rem,6vw,4rem)] font-semibold leading-tight">
+             Abdullah Rajpoot —{' '}
+            <span className="text-gradient-orange">
+             Founder & CEO of Havelent.
+             </span>
+              </h1>
 
             <p className="mt-8 max-w-xl text-xl font-normal leading-relaxed text-white/60">
               I’m Abdullah Rajpoot, the Founder and CEO of Havelent.
