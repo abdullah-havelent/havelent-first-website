@@ -6,7 +6,7 @@ import {
   motion,
   AnimatePresence,
 } from 'framer-motion';
-import { ChevronDown, X } from 'lucide-react';
+import { ChevronDown, X, Linkedin } from 'lucide-react';
 
 const COMPANY_LINKS = [
   {
@@ -547,6 +547,29 @@ export default function Footer() {
               brands worldwide.
             </p>
 
+
+            <a
+  href="https://www.linkedin.com/in/abdullah-rajpoot-havelent/"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Havelent on LinkedIn"
+  className="
+    mt-6
+    inline-flex
+    items-center
+    justify-center
+    text-white/50
+    transition-colors
+    duration-300
+    hover:text-brand-orange
+  "
+>
+  <Linkedin
+    size={20}
+    strokeWidth={1.8}
+  />
+</a>
+
           </div>
 
 
@@ -836,6 +859,29 @@ export default function Footer() {
               cinematic experiences for visionary
               brands worldwide.
             </p>
+
+
+            <a
+  href="https://www.linkedin.com/in/abdullah-rajpoot-havelent/"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Havelent on LinkedIn"
+  className="
+    mt-6
+    inline-flex
+    items-center
+    justify-center
+    text-white/50
+    transition-colors
+    duration-300
+    hover:text-brand-orange
+  "
+>
+  <Linkedin
+    size={20}
+    strokeWidth={1.8}
+  />
+</a>
 
           </div>
 

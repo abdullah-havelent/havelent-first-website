@@ -71,31 +71,32 @@ export default function RootLayout({
         className={`${inter.variable} ${playfair.variable} ${leagueSpartan.variable}`}
       >
 <ThemeProvider>
-  <script
-    type="application/ld+json"
-    dangerouslySetInnerHTML={{
-      __html: JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'Organization',
-        name: 'Havelent',
-        url: 'https://havelent.com',
-        logo: 'https://havelent.com/logos/main-gradient.svg',
-        founder: {
-          '@type': 'Person',
-          name: 'Abdullah Rajpoot',
-          jobTitle: 'Founder & CEO',
-          url: 'https://havelent.com/founder',
-          image:
-            'https://havelent.com/images/ceo-of-havelent-abdullah-rajpoot.webp',
-          worksFor: {
-            '@type': 'Organization',
-            name: 'Havelent',
-            url: 'https://havelent.com',
-          },
-        },
-      }),
-    }}
-  />
+<script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      '@id': 'https://havelent.com/#organization',
+      name: 'Havelent',
+      url: 'https://havelent.com',
+      logo: 'https://havelent.com/logos/main-gradient.svg',
+
+      founder: {
+        '@type': 'Person',
+        '@id': 'https://havelent.com/founder#person',
+        name: 'Abdullah Rajpoot',
+        jobTitle: 'Founder & CEO',
+        url: 'https://havelent.com/founder',
+        image:
+          'https://havelent.com/images/ceo-of-havelent-abdullah-rajpoot.webp',
+        sameAs: [
+          'https://www.linkedin.com/in/abdullah-rajpoot-havelent/',
+        ],
+      },
+    }),
+  }}
+/>
 
   <ClientRoot>
     {children}

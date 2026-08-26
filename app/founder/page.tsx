@@ -6,26 +6,28 @@ import { Linkedin } from 'lucide-react';
 import Footer from '@/components/Footer';
 
 export default function FounderPage() {
-  const founderSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    name: 'Abdullah Rajpoot',
-    jobTitle: 'Founder & CEO',
-    image:
-      'https://havelent.com/images/ceo-of-havelent-abdullah-rajpoot.webp',
-    url: 'https://havelent.com/founder',
-        email: 'abdullah@havelent.com',
+const founderSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': 'https://havelent.com/founder#person',
+  name: 'Abdullah Rajpoot',
+  jobTitle: 'Founder & CEO',
+  image:
+    'https://havelent.com/images/ceo-of-havelent-abdullah-rajpoot.webp',
+  url: 'https://havelent.com/founder',
+  email: 'abdullah@havelent.com',
 
-    sameAs: [
-      'https://www.linkedin.com/in/abdullah-rajpoot-havelent/',
-    ],
+  sameAs: [
+    'https://www.linkedin.com/in/abdullah-rajpoot-havelent/',
+  ],
 
-    worksFor: {
-      '@type': 'Organization',
-      name: 'Havelent',
-      url: 'https://havelent.com',
-    },
-  };
+  worksFor: {
+    '@type': 'Organization',
+    '@id': 'https://havelent.com/#organization',
+    name: 'Havelent',
+    url: 'https://havelent.com',
+  },
+};
 
 return (
   <>
