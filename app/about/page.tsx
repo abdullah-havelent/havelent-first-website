@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import About from "@/components/About";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "About Havelent | Creative Digital Services",
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
-  return <About />;
+  redirect("/#about");
 }
