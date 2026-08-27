@@ -33,7 +33,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
     },
     {
-      url: `${baseUrl}/services/digitalmarketing`,
+      url: `${baseUrl}/services/digital-marketing`,
       lastModified: new Date(),
     },
     {

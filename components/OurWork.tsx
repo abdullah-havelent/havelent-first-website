@@ -272,7 +272,7 @@ export default function OurWork() {
         Selected Work
       </span>
 
-      <h2 className="mt-5 max-w-none whitespace-nowrap font-display text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
+      <h2 className="mt-5 max-w-full break-words font-display text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl lg:whitespace-nowrap">
         Crafted to{' '}
         <span className="text-gradient-orange">
           Make Brands Stand Out.
