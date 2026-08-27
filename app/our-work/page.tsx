@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
+
+import OurWork from "@/components/OurWork";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Our Work | Havelent",
@@ -8,5 +10,10 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  redirect("/#our-work");
+  return (
+    <>
+      <OurWork />
+      <Footer />
+    </>
+  );
 }
