@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Contact from "@/components/Contact";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Contact Havelent | Get in Touch",
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function ContactPage() {
-  return <Contact />;
+  redirect("/#contact");
 }
