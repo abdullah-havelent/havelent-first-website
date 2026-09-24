@@ -5,48 +5,49 @@ import { motion } from 'framer-motion';
 const SERVICES = [
   {
     number: '01',
-    title: 'Content Strategy',
+    title: 'Social Media Strategy',
     description:
-      'Plan engaging content that aligns with your brand and business goals.',
+      'Build a focused social media strategy around your brand goals, target audience, content direction, and long-term growth objectives.',
   },
   {
     number: '02',
-    title: 'Content Creation',
+    title: 'Social Media Content Creation',
     description:
-      'Creative posts, reels, stories, and graphics designed to capture attention.',
+      'Create engaging posts, reels, stories, and branded graphics designed to capture attention and strengthen your social media presence.',
   },
   {
     number: '03',
-    title: 'Account Management',
+    title: 'Social Media Management',
     description:
-      'Consistent posting, scheduling, and profile optimization across all platforms.',
+      'Keep your social channels active and consistent with professional content scheduling, publishing, profile optimization, and ongoing account management.',
   },
   {
     number: '04',
     title: 'Community Management',
     description:
-      'Respond to comments, messages, and build meaningful relationships with your audience.',
+      'Manage comments, messages, and audience interactions to build meaningful relationships and create a stronger online community around your brand.',
   },
   {
     number: '05',
     title: 'Social Media Advertising',
     description:
-      'Run targeted campaigns to increase reach, engagement, and conversions.',
+      'Reach the right audience with targeted social media advertising campaigns across platforms such as Facebook, Instagram, and TikTok.',
   },
   {
     number: '06',
-    title: 'Analytics & Reporting',
+    title: 'Social Media Analytics',
     description:
-      'Track performance with detailed reports and optimize your social media strategy.',
+      'Track content and campaign performance through social media analytics, reporting, and continuous optimization to improve your strategy over time.',
   },
 ];
 
-export default function MarketingServices() {
+
+export default function SocialMediaServices() {
   return (
     <section
-  id="services"
-  className="px-6 py-24"
->
+      id="services"
+      className="px-6 py-24"
+    >
       <div className="mx-auto max-w-7xl">
 
         <div className="mb-16 text-center">
@@ -55,12 +56,13 @@ export default function MarketingServices() {
           </span>
 
           <h2 className="mt-4 font-display text-5xl font-semibold text-white">
-            Professional Social Media Management
+            Social Media Management Services
           </h2>
 
           <p className="mx-auto mt-5 max-w-2xl text-white/60">
-            We help brands grow through strategic content planning, creative publishing,
-community engagement, and consistent social media management across every platform.
+           We manage your social media presence through strategic content planning,
+          consistent publishing, community engagement, targeted advertising, and
+          performance analytics designed to support long-term brand growth.
           </p>
         </div>
 
@@ -69,15 +71,60 @@ community engagement, and consistent social media management across every platfo
           {SERVICES.map((service, index) => (
             <motion.div
               key={service.number}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.15 }}
-              className="group relative overflow-hidden border-b border-white/10 bg-white/[0.03] p-8 transition-all duration-500 last:border-none hover:bg-[#1b130d]"
+
+              /* Desktop animation only */
+              initial={{
+                opacity: 0,
+                y: 40,
+              }}
+
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
+
+              viewport={{
+                once: true,
+              }}
+
+              transition={{
+                delay: index * 0.15,
+              }}
+
+              className="
+                group
+                relative
+                overflow-hidden
+                border-b
+                border-white/10
+                bg-white/[0.03]
+                p-8
+                last:border-none
+
+                md:transition-all
+                md:duration-500
+                md:hover:bg-[#1b130d]
+              "
             >
 
-              {/* Left Glow */}
-              <div className="pointer-events-none absolute left-0 top-0 h-full w-56 bg-[radial-gradient(circle_at_left,rgba(249,115,22,.18),transparent_70%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+              {/* Left Glow — desktop only */}
+              <div
+                className="
+                  pointer-events-none
+                  absolute
+                  left-0
+                  top-0
+                  hidden
+                  h-full
+                  w-56
+                  bg-[radial-gradient(circle_at_left,rgba(249,115,22,.18),transparent_70%)]
+                  opacity-0
+                  transition-opacity
+                  duration-500
+                  md:block
+                  md:group-hover:opacity-100
+                "
+              />
 
               <div className="relative flex gap-8">
 
@@ -97,8 +144,26 @@ community engagement, and consistent social media management across every platfo
 
               </div>
 
-              {/* Bottom Line */}
-              <div className="absolute bottom-0 left-0 h-[2px] w-full origin-left scale-x-0 bg-gradient-to-r from-brand-orange via-brand-orange to-transparent transition-transform duration-500 group-hover:scale-x-100" />
+              {/* Bottom Line — desktop animation only */}
+              <div
+                className="
+                  absolute
+                  bottom-0
+                  left-0
+                  h-[2px]
+                  w-full
+                  origin-left
+                  bg-gradient-to-r
+                  from-brand-orange
+                  via-brand-orange
+                  to-transparent
+
+                  md:scale-x-0
+                  md:transition-transform
+                  md:duration-500
+                  md:group-hover:scale-x-100
+                "
+              />
 
             </motion.div>
           ))}

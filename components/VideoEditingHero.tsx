@@ -12,10 +12,9 @@ import { useRouter } from 'next/navigation';
 import ServiceOutlineText from '@/components/ServiceOutlineText';
 
 const headingWords = [
-  { text: 'Every', color: 'white' },
-  { text: 'Frame,', color: 'gradient' },
-  { text: 'Tells a', color: 'white' },
-  { text: ' Story.', color: 'gradient' },
+  { text: 'Video', color: 'white' },
+  { text: 'Editing', color: 'gradient' },
+  { text: 'Services', color: 'white' },
 ];
 
 export default function VideoEditingHero() {
@@ -295,9 +294,7 @@ export default function VideoEditingHero() {
             sm:text-lg
           "
         >
-          We transform raw footage into cinematic stories that capture
-          attention, increase audience retention, and make your brand
-          impossible to ignore.
+          Professional video editing services for YouTube creators, brands, businesses, podcasters, and content creators. We turn raw footage into cinematic, engaging videos built to capture attention and tell your story.
         </motion.p>
 
         {/* =======================================================
@@ -339,7 +336,7 @@ export default function VideoEditingHero() {
             }}
             data-cursor="button"
             onClick={() => {
-              router.push('/#contact');
+              router.push('#contact');
 
               setTimeout(() => {
                 document

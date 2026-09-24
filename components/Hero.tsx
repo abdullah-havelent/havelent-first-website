@@ -16,8 +16,7 @@ import Link from 'next/link';
 import React from 'react';
 
 import Marquee from '@/components/Marquee';
-import RotatingTriangle from '@/components/RotatingTriangle';
-import RotatingSquare from '@/components/RotatingSquare';
+
 import { useTheme } from '@/components/ThemeProvider';
 
 // ==========================================
@@ -29,6 +28,7 @@ const headingWords = [
   { text: 'Vision,', color: 'gradient' },
   { text: 'Our', color: 'white' },
   { text: 'Responsibility.', color: 'gradient' },
+  { text: 'Digital Agency.', color: 'white' },
 ];
 
 // ==========================================
@@ -85,26 +85,23 @@ export default function Hero() {
       (v) => `${v * -8}px`
     );
 
-  const onMouseMove = (
-    e: React.MouseEvent
-  ) => {
+  const onMouseMove = (e: React.MouseEvent) => {
+    if (!window.matchMedia('(min-width: 1024px) and (hover: hover) and (pointer: fine)').matches) return;
 
-    const rect =
-      e.currentTarget.getBoundingClientRect();
+    const section = e.currentTarget as HTMLElement;
+    const rect = section.getBoundingClientRect();
+    const normalizedX = (e.clientX - rect.left) / rect.width - 0.5;
+    const normalizedY = (e.clientY - rect.top) / rect.height - 0.5;
+    const distance = Math.sqrt(normalizedX ** 2 + normalizedY ** 2);
+    const proximity = Math.max(0, Math.min(1, 1 - distance / 0.62));
 
-    mx.set(
-      (e.clientX - rect.left) /
-        rect.width -
-        0.5
-    );
-
-    my.set(
-      (e.clientY - rect.top) /
-        rect.height -
-        0.5
-    );
+    mx.set(normalizedX);
+    my.set(normalizedY);
+    section.style.setProperty('--hero-orbit-x', normalizedX * 36 + 'px');
+    section.style.setProperty('--hero-orbit-y', normalizedY * 28 + 'px');
+    section.style.setProperty('--hero-orbit-brightness', String(1 + proximity * 0.38));
+    section.style.setProperty('--hero-orbit-opacity', String(0.78 + proximity * 0.18));
   };
-
   // ==========================================
   // CLICK TO REVEAL
   // ==========================================
@@ -143,10 +140,10 @@ export default function Hero() {
         flex-col
         items-center
         justify-start
-        bg-[#ffefe8]
+        bg-[#fdccae] md:bg-[#fdccae]
         px-6
         pb-20
-        pt-32
+        pt-36
       "
     >
 
@@ -154,9 +151,24 @@ export default function Hero() {
           ROTATING SHAPES
       ====================================== */}
 
-      <RotatingSquare />
+<div
+  aria-hidden="true"
+  className={`hero-orbit pointer-events-none absolute left-1/2 top-[48%] z-[1] -translate-x-1/2 -translate-y-1/2 ${
+    theme === 'charcoal'
+      ? 'hero-orbit-dark'
+      : 'hero-orbit-light'
+  }`}
+>
+  <div className="hero-orbit-ring hero-orbit-ring-one" />
+  <div className="hero-orbit-ring hero-orbit-ring-two" />
+  <div className="hero-orbit-ring hero-orbit-ring-three" />
 
-      <RotatingTriangle />
+  <div className="hero-orbit-core" />
+  <div className="hero-orbit-glow" />
+
+  <span className="hero-orbit-dot hero-orbit-dot-one" />
+  <span className="hero-orbit-dot hero-orbit-dot-two" />
+</div>
 
       {/* ======================================
           BACKGROUND GRID
@@ -190,6 +202,8 @@ export default function Hero() {
           ease: 'easeInOut',
         }}
         className="
+          hidden
+          md:block
           animate-float
           pointer-events-none
           absolute
@@ -223,13 +237,15 @@ export default function Hero() {
           ease: 'easeInOut',
         }}
         className="
+          hidden
+          md:block
           pointer-events-none
           absolute
           right-0
           top-0
           h-[900px]
           w-[900px]
-          translate-y-4
+          translate-y-10
           animate-glowa
           bg-gradient-to-bl
           from-orange-500/100
@@ -641,6 +657,44 @@ export default function Hero() {
 
       </h1>
 
+
+<motion.p
+  initial={{
+    opacity: 0,
+    y: 18,
+    filter: 'blur(4px)',
+  }}
+  animate={{
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+  }}
+  transition={{
+    duration: 0.7,
+    delay: 0.8,
+    ease: [0.22, 1, 0.36, 1],
+  }}
+  className="
+    mt-6
+    max-w-2xl
+    text-center
+    text-base
+    leading-7
+    sm:text-lg
+  "
+  style={{
+    color:
+      theme === 'charcoal'
+        ? 'rgba(255, 255, 255, 0.70)'
+        : 'rgba(0, 0, 0, 0.65)',
+  }}
+>
+  Havelent is a creative digital agency offering thoughtful digital agency
+  services that help modern brands turn ideas into impactful visuals,
+  engaging content, and meaningful digital experiences.
+</motion.p>
+
+
       {/* ======================================
           CTA
       ====================================== */}
@@ -659,7 +713,7 @@ export default function Hero() {
           delay: 0.9,
         }}
         className="
-          mt-10
+          mt-20
           flex
           flex-col
           items-center
@@ -670,7 +724,7 @@ export default function Hero() {
 
         {/* START A PROJECT */}
 
-        <Link href="/#contact">
+        <Link href="#contact">
 
           <motion.button
             whileHover={{
@@ -879,7 +933,7 @@ export default function Hero() {
                 People are exploring Havelent
               </span>
 
-              <span className="mx-1.5 text-brand-orange">
+              <span className="mx-.5 text-brand-orange">
                 ·
               </span>
 
@@ -1222,6 +1276,588 @@ export default function Hero() {
             transform: scale(1.10);
           }
         }
+
+
+
+/* ==========================================
+   PREMIUM ORBITAL BACKGROUND
+========================================== */
+
+.hero-orbit {
+  width: min(72vw, 920px);
+  height: min(72vw, 920px);
+  max-width: 920px;
+  max-height: 920px;
+  opacity: 0.85;
+  transform-style: preserve-3d;
+  z-index: 1;
+  perspective: 1200px;
+}
+
+/* ------------------------------------------
+   RINGS
+------------------------------------------ */
+
+.hero-orbit-ring {
+  position: absolute;
+  inset: 50%;
+  border-radius: 50%;
+  transform-origin: center;
+  border: 1.5px solid rgba(194, 65, 12, 0.32);
+  will-change: transform, opacity;
+}
+
+/* Main horizontal ring */
+
+.hero-orbit-ring-one {
+  width: 100%;
+  height: 46%;
+  transform: translate(-50%, -50%) rotate(-18deg);
+  box-shadow:
+    0 0 30px rgba(249, 115, 22, 0.08),
+    inset 0 0 30px rgba(249, 115, 22, 0.04);
+  animation: heroOrbitOne 19s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+/* Diagonal ring */
+
+.hero-orbit-ring-two {
+  width: 76%;
+  height: 76%;
+  transform: translate(-50%, -50%) rotate(32deg);
+  border-color: rgba(234, 88, 12, 0.20);
+  box-shadow:
+    0 0 45px rgba(249, 115, 22, 0.06);
+  animation: heroOrbitTwo 27s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+}
+
+/* Thin inner ring */
+
+.hero-orbit-ring-three {
+  width: 52%;
+  height: 52%;
+  transform: translate(-50%, -50%) rotate(-12deg);
+  border-color: rgba(255, 179, 107, 0.24);
+  animation: heroOrbitThree 11s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+/* ------------------------------------------
+   CENTER
+------------------------------------------ */
+
+.hero-orbit-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: #f97316;
+  box-shadow:
+    0 0 12px rgba(249, 115, 22, 0.65),
+    0 0 35px rgba(249, 115, 22, 0.22);
+  animation: heroOrbitCore 4.8s ease-in-out infinite;
+}
+
+/* ------------------------------------------
+   CENTRAL ATMOSPHERIC GLOW
+------------------------------------------ */
+
+.hero-orbit-glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 42%;
+  height: 42%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(249, 115, 22, 0.11) 0%,
+    rgba(249, 115, 22, 0.045) 32%,
+    transparent 72%
+  );
+  filter: blur(30px);
+  animation: heroOrbitGlow 7.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  will-change: transform, opacity;
+}
+
+/* ------------------------------------------
+   ORBITING DOTS
+------------------------------------------ */
+
+.hero-orbit-dot {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #f97316;
+  box-shadow:
+    0 0 10px rgba(249, 115, 22, 0.7),
+    0 0 22px rgba(249, 115, 22, 0.25);
+  will-change: transform, opacity;
+}
+
+.hero-orbit-dot-one {
+  left: 12%;
+  top: 38%;
+  animation: heroDotOne 12s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+.hero-orbit-dot-two {
+  right: 15%;
+  bottom: 31%;
+  width: 4px;
+  height: 4px;
+  opacity: 0.7;
+  animation: heroDotTwo 15s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+/* ------------------------------------------
+   DARK THEME
+------------------------------------------ */
+
+.hero-orbit-dark .hero-orbit-ring-one {
+  border-color: rgba(249, 115, 22, 0.48);
+}
+
+.hero-orbit-dark .hero-orbit-ring-two {
+  border-color: rgba(255, 122, 26, 0.36);
+}
+
+.hero-orbit-dark .hero-orbit-ring-three {
+  border-color: rgba(255, 179, 107, 0.38);
+}
+
+.hero-orbit-dark .hero-orbit-glow {
+  background: radial-gradient(
+    circle,
+    rgba(249, 115, 22, 0.13) 0%,
+    rgba(249, 115, 22, 0.045) 35%,
+    transparent 72%
+  );
+}
+
+/* ------------------------------------------
+   LIGHT THEME
+------------------------------------------ */
+
+.hero-orbit-light .hero-orbit-ring-one {
+  border-color: rgba(154, 52, 18, 0.38);
+}
+
+.hero-orbit-light .hero-orbit-ring-two {
+  border-color: rgba(124, 45, 18, 0.28);
+}
+
+.hero-orbit-light .hero-orbit-ring-three {
+  border-color: rgba(67, 20, 7, 0.25);
+}
+
+.hero-orbit-light .hero-orbit-glow {
+  background: radial-gradient(
+    circle,
+    rgba(194, 65, 12, 0.10) 0%,
+    rgba(194, 65, 12, 0.035) 35%,
+    transparent 72%
+  );
+}
+
+.hero-orbit-light .hero-orbit-core,
+.hero-orbit-light .hero-orbit-dot {
+  background: #c2410c;
+}
+
+/* ------------------------------------------
+   PREMIUM RING 1
+   SLOW 3D BREATH + TILT
+------------------------------------------ */
+
+@keyframes heroOrbitOne {
+  0% {
+    transform:
+      translate(-50%, -50%)
+      rotate(-18deg)
+      rotateX(0deg)
+      rotateY(0deg)
+      scale(1);
+    opacity: 0.72;
+  }
+
+  18% {
+    transform:
+      translate(-50%, -50%)
+      rotate(-11deg)
+      rotateX(3deg)
+      rotateY(-4deg)
+      scale(1.012);
+    opacity: 0.88;
+  }
+
+  37% {
+    transform:
+      translate(-50%, -50%)
+      rotate(-2deg)
+      rotateX(-2deg)
+      rotateY(5deg)
+      scale(1.025);
+    opacity: 0.78;
+  }
+
+  54% {
+    transform:
+      translate(-50%, -50%)
+      rotate(7deg)
+      rotateX(4deg)
+      rotateY(-2deg)
+      scale(1.008);
+    opacity: 0.94;
+  }
+
+  72% {
+    transform:
+      translate(-50%, -50%)
+      rotate(-1deg)
+      rotateX(-3deg)
+      rotateY(3deg)
+      scale(0.99);
+    opacity: 0.76;
+  }
+
+  88% {
+    transform:
+      translate(-50%, -50%)
+      rotate(-12deg)
+      rotateX(2deg)
+      rotateY(-3deg)
+      scale(1.015);
+    opacity: 0.86;
+  }
+
+  100% {
+    transform:
+      translate(-50%, -50%)
+      rotate(-18deg)
+      rotateX(0deg)
+      rotateY(0deg)
+      scale(1);
+    opacity: 0.72;
+  }
+}
+
+/* ------------------------------------------
+   PREMIUM RING 2
+   INDEPENDENT ELLIPTICAL DRIFT
+------------------------------------------ */
+
+@keyframes heroOrbitTwo {
+  0% {
+    transform:
+      translate(-50%, -50%)
+      rotate(32deg)
+      scale(0.98, 1);
+    opacity: 0.48;
+  }
+
+  20% {
+    transform:
+      translate(-50%, -50%)
+      rotate(43deg)
+      scale(1.015, 0.985);
+    opacity: 0.68;
+  }
+
+  42% {
+    transform:
+      translate(-50%, -50%)
+      rotate(56deg)
+      scale(1.025, 0.975);
+    opacity: 0.54;
+  }
+
+  63% {
+    transform:
+      translate(-50%, -50%)
+      rotate(46deg)
+      scale(0.985, 1.015);
+    opacity: 0.72;
+  }
+
+  81% {
+    transform:
+      translate(-50%, -50%)
+      rotate(37deg)
+      scale(1.01, 0.99);
+    opacity: 0.50;
+  }
+
+  100% {
+    transform:
+      translate(-50%, -50%)
+      rotate(32deg)
+      scale(0.98, 1);
+    opacity: 0.48;
+  }
+}
+
+/* ------------------------------------------
+   PREMIUM RING 3
+   ORGANIC INNER PULSE
+------------------------------------------ */
+
+@keyframes heroOrbitThree {
+  0%,
+  100% {
+    transform:
+      translate(-50%, -50%)
+      rotate(-12deg)
+      scale(0.94, 1);
+    opacity: 0.48;
+  }
+
+  24% {
+    transform:
+      translate(-50%, -50%)
+      rotate(-4deg)
+      scale(1.015, 0.985);
+    opacity: 0.78;
+  }
+
+  48% {
+    transform:
+      translate(-50%, -50%)
+      rotate(9deg)
+      scale(1.045, 0.96);
+    opacity: 0.96;
+  }
+
+  67% {
+    transform:
+      translate(-50%, -50%)
+      rotate(3deg)
+      scale(1.015, 1);
+    opacity: 0.68;
+  }
+
+  84% {
+    transform:
+      translate(-50%, -50%)
+      rotate(-7deg)
+      scale(0.97, 1.025);
+    opacity: 0.84;
+  }
+}
+
+/* ------------------------------------------
+   CENTRAL GLOW
+------------------------------------------ */
+
+@keyframes heroOrbitGlow {
+  0% {
+    transform:
+      translate(-50%, -50%)
+      scale(0.82)
+      translate3d(-8px, 4px, 0);
+    opacity: 0.42;
+  }
+
+  22% {
+    transform:
+      translate(-50%, -50%)
+      scale(0.98)
+      translate3d(4px, -6px, 0);
+    opacity: 0.68;
+  }
+
+  47% {
+    transform:
+      translate(-50%, -50%)
+      scale(1.12)
+      translate3d(9px, 2px, 0);
+    opacity: 0.92;
+  }
+
+  68% {
+    transform:
+      translate(-50%, -50%)
+      scale(1.02)
+      translate3d(-5px, 8px, 0);
+    opacity: 0.62;
+  }
+
+  84% {
+    transform:
+      translate(-50%, -50%)
+      scale(0.91)
+      translate3d(-9px, -3px, 0);
+    opacity: 0.48;
+  }
+
+  100% {
+    transform:
+      translate(-50%, -50%)
+      scale(0.82)
+      translate3d(-8px, 4px, 0);
+    opacity: 0.42;
+  }
+}
+
+/* ------------------------------------------
+   CORE PULSE
+------------------------------------------ */
+
+@keyframes heroOrbitCore {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(0.82);
+    opacity: 0.72;
+  }
+
+  35% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.9;
+  }
+
+  58% {
+    transform: translate(-50%, -50%) scale(1.22);
+    opacity: 1;
+  }
+
+  78% {
+    transform: translate(-50%, -50%) scale(0.94);
+    opacity: 0.82;
+  }
+}
+
+/* ------------------------------------------
+   ORBITING DOT 1
+   CURVED FLOAT
+------------------------------------------ */
+
+@keyframes heroDotOne {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.9);
+    opacity: 0.58;
+  }
+
+  20% {
+    transform: translate3d(11px, -8px, 0) scale(1);
+    opacity: 0.82;
+  }
+
+  42% {
+    transform: translate3d(24px, 2px, 0) scale(1.08);
+    opacity: 1;
+  }
+
+  63% {
+    transform: translate3d(13px, 15px, 0) scale(0.94);
+    opacity: 0.7;
+  }
+
+  82% {
+    transform: translate3d(-5px, 8px, 0) scale(0.86);
+    opacity: 0.52;
+  }
+}
+
+/* ------------------------------------------
+   ORBITING DOT 2
+   COUNTER-MOTION
+------------------------------------------ */
+
+@keyframes heroDotTwo {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.82);
+    opacity: 0.38;
+  }
+
+  26% {
+    transform: translate3d(-12px, 6px, 0) scale(1);
+    opacity: 0.68;
+  }
+
+  51% {
+    transform: translate3d(-22px, -8px, 0) scale(1.12);
+    opacity: 0.9;
+  }
+
+  73% {
+    transform: translate3d(-8px, -17px, 0) scale(0.96);
+    opacity: 0.62;
+  }
+
+  88% {
+    transform: translate3d(5px, -7px, 0) scale(0.86);
+    opacity: 0.44;
+  }
+}
+
+/* DESKTOP INTERACTIVE ORBITAL PARALLAX */
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .hero-orbit {
+    margin-left: var(--hero-orbit-x, 0px);
+    margin-top: var(--hero-orbit-y, 0px);
+    filter: brightness(var(--hero-orbit-brightness, 1));
+    opacity: var(--hero-orbit-opacity, 0.78);
+    transition: margin 420ms cubic-bezier(0.22, 1, 0.36, 1), filter 320ms ease, opacity 320ms ease;
+  }
+  .hero-orbit-ring-one { animation: heroOrbitClockwise 26s linear infinite; }
+  .hero-orbit-ring-two { animation: heroOrbitCounterClockwise 32s linear infinite; }
+  .hero-orbit-ring-three { animation: heroOrbitInnerClockwise 21s linear infinite; }
+  .hero-orbit-glow { animation-duration: 20s; }
+  .hero-orbit-core { animation-duration: 18s; }
+  .hero-orbit-dot-one, .hero-orbit-dot-two { left:50%; right:auto; top:50%; bottom:auto; }
+  .hero-orbit-dot-one { animation: heroDotOrbitClockwise 22s linear infinite; }
+  .hero-orbit-dot-two { animation: heroDotOrbitCounterClockwise 28s linear infinite; }
+}
+@keyframes heroOrbitClockwise {
+  0% { transform:translate(-50%,-50%) rotate(-18deg) scale(1); opacity:.72; }
+  50% { transform:translate(-50%,-50%) rotate(162deg) scale(1.025); opacity:.94; }
+  100% { transform:translate(-50%,-50%) rotate(342deg) scale(1); opacity:.72; }
+}
+@keyframes heroOrbitCounterClockwise {
+  0% { transform:translate(-50%,-50%) rotate(32deg) scale(.98,1); opacity:.5; }
+  50% { transform:translate(-50%,-50%) rotate(-148deg) scale(1.02,.98); opacity:.74; }
+  100% { transform:translate(-50%,-50%) rotate(-328deg) scale(.98,1); opacity:.5; }
+}
+@keyframes heroOrbitInnerClockwise {
+  0% { transform:translate(-50%,-50%) rotate(-12deg) scale(.96,1); opacity:.5; }
+  50% { transform:translate(-50%,-50%) rotate(168deg) scale(1.03,.97); opacity:.9; }
+  100% { transform:translate(-50%,-50%) rotate(348deg) scale(.96,1); opacity:.5; }
+}
+@keyframes heroDotOrbitClockwise {
+  from { transform:translate(-50%,-50%) rotate(0deg) translateX(min(34vw,390px)); opacity:.58; }
+  50% { opacity:1; }
+  to { transform:translate(-50%,-50%) rotate(360deg) translateX(min(34vw,390px)); opacity:.58; }
+}
+@keyframes heroDotOrbitCounterClockwise {
+  from { transform:translate(-50%,-50%) rotate(0deg) translateX(min(25vw,290px)); opacity:.42; }
+  50% { opacity:.9; }
+  to { transform:translate(-50%,-50%) rotate(-360deg) translateX(min(25vw,290px)); opacity:.42; }
+}
+@media (min-width:768px) and (max-width:1023px) {
+  .hero-orbit-ring,.hero-orbit-core,.hero-orbit-glow,.hero-orbit-dot { animation:none !important; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .hero-orbit { margin-left:0 !important; margin-top:0 !important; transition:none !important; }
+  .hero-orbit-ring,.hero-orbit-core,.hero-orbit-glow,.hero-orbit-dot { animation:none !important; }
+}
+/* ------------------------------------------
+   MOBILE
+------------------------------------------ */
+
+@media (max-width: 767px) {
+  .hero-orbit {
+    display: none;
+  }
+}
+
+
+
 
       `}</style>
 

@@ -13,6 +13,10 @@ const COMPANY_LINKS = [
     name: 'Home',
     section: 'home',
   },
+    {
+    name: 'Reviews',
+    section: 'reviews',
+  },
   {
     name: 'Our Work',
     section: 'our-work',
@@ -24,6 +28,10 @@ const COMPANY_LINKS = [
   {
     name: 'About',
     section: 'about',
+  },
+    {
+    name: 'Blog',
+    section: 'blog',
   },
   {
     name: 'Contact Us',
@@ -74,6 +82,17 @@ const SERVICE_GROUPS = [
       'Community Management',
       'Social Media Advertising',
       'Analytics & Reporting',
+    ],
+  },
+  {
+    title: 'Web Development',
+    services: [
+      'Custom Websites',
+      'Responsive Design',
+      'Modern Web Design',
+      'Conversion Design',
+      'Performance',
+      'Ready Websites',
     ],
   },
 ];
@@ -141,147 +160,54 @@ export default function Footer() {
    * ACTUAL SCROLL FUNCTION
    * ====================================================
    */
-  const scrollToSection = (
-    sectionId: string
-  ) => {
-    let attempts = 0;
+const scrollToSection = (
+  sectionId: string
+) => {
+  let attempts = 0;
 
-    const tryScroll = () => {
-      const element =
-        document.getElementById(
-          sectionId
+  const tryScroll = () => {
+    const element =
+      document.getElementById(
+        sectionId
+      );
+
+    if (!element) {
+      attempts += 1;
+
+      if (attempts < 40) {
+        window.setTimeout(
+          tryScroll,
+          100
         );
-
-      /*
-       * Section not mounted yet
-       */
-      if (!element) {
-        attempts += 1;
-
-        if (attempts < 40) {
-          window.setTimeout(
-            tryScroll,
-            100
-          );
-        }
-
-        return;
       }
 
+      return;
+    }
 
-      /*
-       * Close mobile accordion
-       */
-      setOpenGroup(null);
+    setOpenGroup(null);
 
+    element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
 
-      /*
-       * Small delay makes this reliable
-       * after React/Framer Motion layout.
-       */
-      window.requestAnimationFrame(() => {
-        window.requestAnimationFrame(() => {
-
-          const scrollParent =
-            getScrollParent(
-              element
-            );
-
-          const navOffset = 0;
-
-
-          /*
-           * ==========================================
-           * NORMAL WINDOW SCROLL
-           * ==========================================
-           */
-          if (
-            scrollParent ===
-            window
-          ) {
-            const rect =
-              element.getBoundingClientRect();
-
-            const currentScroll =
-              window.pageYOffset ||
-              document.documentElement
-                .scrollTop ||
-              document.body.scrollTop ||
-              0;
-
-            const target =
-              currentScroll +
-              rect.top -
-              navOffset;
-
-            window.scrollTo({
-              top: Math.max(
-                0,
-                target
-              ),
-              behavior: 'smooth',
-            });
-
-          }
-
-
-          /*
-           * ==========================================
-           * CUSTOM SCROLL CONTAINER
-           * ==========================================
-           */
-          else if (
-            scrollParent instanceof HTMLElement
-          ) {
-            const parentRect =
-              scrollParent.getBoundingClientRect();
-
-            const elementRect =
-              element.getBoundingClientRect();
-
-            const target =
-              scrollParent.scrollTop +
-              (elementRect.top -
-                parentRect.top) -
-              navOffset;
-
-            scrollParent.scrollTo({
-              top: Math.max(
-                0,
-                target
-              ),
-              behavior: 'smooth',
-            });
-          }
-
-
-          /*
-           * Update URL only AFTER
-           * the scroll command.
-           */
-          if (
-            sectionId ===
-            'home'
-          ) {
-            window.history.replaceState(
-              null,
-              '',
-              '/'
-            );
-          } else {
-            window.history.replaceState(
-              null,
-              '',
-              `#${sectionId}`
-            );
-          }
-
-        });
-      });
-    };
-
-    tryScroll();
+    if (sectionId === 'home') {
+      window.history.replaceState(
+        null,
+        '',
+        '/'
+      );
+    } else {
+      window.history.replaceState(
+        null,
+        '',
+        `#${sectionId}`
+      );
+    }
   };
+
+  tryScroll();
+};
 
 
   /*
@@ -324,60 +250,25 @@ export default function Footer() {
    * FOOTER LINK
    * ====================================================
    */
-  const handleFooterNav = (
-    section: string
-  ) => {
+  const handleFooterNav = (section: string) => {
     setOpenGroup(null);
 
-
-    /*
-     * ==========================================
-     * HOME
-     * ==========================================
-     */
-    if (
-      section === 'home'
-    ) {
-      if (
-        pathname === '/'
-      ) {
-        scrollToSection(
-          'home'
-        );
-      } else {
-        window.location.href =
-          '/#home';
-      }
-
+    if (pathname !== '/') {
+      window.location.href =
+        section === 'home' ? '/' : `/#${section}`;
       return;
     }
 
+    const mobileAccordionDelay = window.matchMedia(
+      '(max-width: 767px)'
+    ).matches
+      ? 340
+      : 0;
 
-    /*
-     * ==========================================
-     * HOMEPAGE
-     * ==========================================
-     */
-    if (
-      pathname === '/'
-    ) {
-      scrollToSection(
-        section
-      );
-
-      return;
-    }
-
-
-    /*
-     * ==========================================
-     * INNER PAGE
-     * ==========================================
-     */
-    window.location.href =
-      `/#${section}`;
+    window.setTimeout(() => {
+      scrollToSection(section);
+    }, mobileAccordionDelay);
   };
-
 
   /*
    * ====================================================
@@ -493,7 +384,7 @@ export default function Footer() {
       <div
         className="
           mx-auto
-          max-w-7xl
+          max-w-[1500px]
         "
       >
 
@@ -506,8 +397,9 @@ export default function Footer() {
             hidden
             items-stretch
             lg:grid
-            lg:grid-cols-[1.2fr_0.75fr_1.15fr_1.15fr_1.2fr_1.35fr]
-            lg:gap-6
+            lg:grid-cols-[1.05fr_0.78fr_1.25fr_1.2fr_1.3fr_1.55fr_1.35fr]
+            lg:gap-5
+            xl:gap-7
           "
         >
 
@@ -542,10 +434,9 @@ export default function Footer() {
                 text-white/50
               "
             >
-              A premium digital agency crafting
-              cinematic experiences for visionary
-              brands worldwide.
+              Serving clients across the USA and worldwide
             </p>
+
 
 
             <a
@@ -565,7 +456,7 @@ export default function Footer() {
   "
 >
   <Linkedin
-    size={20}
+    size={24}
     strokeWidth={1.8}
   />
 </a>
@@ -700,8 +591,11 @@ export default function Footer() {
                     ? '/services/graphic-design'
                     : group.title ===
                       'Digital Marketing'
-                      ? '/services/digitalmarketing'
-                      : '/services/social-media-management';
+                      ? '/services/digital-marketing'
+                      : group.title ===
+                        'Social Media Management'
+                        ? '/services/social-media-management'
+                        : '/services/web-development';
 
               return (
                 <div
@@ -788,7 +682,7 @@ export default function Footer() {
                               )}
                             </span>
 
-                            <span>
+                            <span className="xl:whitespace-nowrap">
                               {service}
                             </span>
 
@@ -855,10 +749,9 @@ export default function Footer() {
                 text-white/50
               "
             >
-              A premium digital agency crafting
-              cinematic experiences for visionary
-              brands worldwide.
+              Serving clients across the USA and worldwide
             </p>
+
 
 
             <a
@@ -878,7 +771,7 @@ export default function Footer() {
   "
 >
   <Linkedin
-    size={20}
+    size={24}
     strokeWidth={1.8}
   />
 </a>
@@ -1253,9 +1146,6 @@ export default function Footer() {
             All rights reserved.
           </span>
 
-          <span>
-            Designed & built with obsession.
-          </span>
 
         </motion.div>
 
@@ -1410,7 +1300,7 @@ export default function Footer() {
                     text-white/50
                   "
                 >
-                  Found something that isn't working correctly?
+                  Found something that isn&apos;t working correctly?
                   Let us know. Please include your email address so our team
                   can follow up, discuss the issue with you, and make sure
                   everything is resolved to your satisfaction.

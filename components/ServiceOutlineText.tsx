@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-
+import { useLayoutEffect, useRef, useState } from 'react';
 
 interface ServiceOutlineTextProps {
   text: string;
@@ -12,6 +12,55 @@ export default function ServiceOutlineText({
   text,
   scaleX = 0.90,
 }: ServiceOutlineTextProps) {
+  const textRef = useRef<HTMLDivElement | null>(null);
+  const measureRef = useRef<HTMLDivElement | null>(null);
+  const [fontSize, setFontSize] = useState(240);
+
+  useLayoutEffect(() => {
+    const element = textRef.current;
+    const measureElement = measureRef.current;
+
+    if (!element || !measureElement) return;
+
+    const fitText = () => {
+      const parentWidth =
+        element.parentElement?.clientWidth ?? window.innerWidth;
+
+      const actualTextWidth =
+        measureElement.getBoundingClientRect().width;
+
+      if (!actualTextWidth) return;
+
+      const renderedWidth = actualTextWidth * scaleX;
+
+      if (renderedWidth > parentWidth) {
+        const fittedSize =
+          240 * (parentWidth / renderedWidth);
+
+        setFontSize(fittedSize);
+      } else {
+        setFontSize(240);
+      }
+    };
+
+    fitText();
+
+    const resizeObserver = new ResizeObserver(fitText);
+
+    resizeObserver.observe(element);
+
+    if (element.parentElement) {
+      resizeObserver.observe(element.parentElement);
+    }
+
+    window.addEventListener('resize', fitText);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', fitText);
+    };
+  }, [scaleX, text]);
+
   return (
     <div
       aria-hidden="true"
@@ -30,7 +79,29 @@ export default function ServiceOutlineText({
         md:flex
       "
     >
+      {/* Invisible measurement only */}
+      <div
+        ref={measureRef}
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          left: '-99999px',
+          top: 0,
+          width: 'max-content',
+          whiteSpace: 'nowrap',
+          visibility: 'hidden',
+          fontFamily: 'Arial Black, Arial, Helvetica, sans-serif',
+          fontSize: '240px',
+          fontWeight: 900,
+          lineHeight: 1,
+          letterSpacing: '0em',
+        }}
+      >
+        {text}
+      </div>
+
       <motion.div
+        ref={textRef}
         initial={{
           opacity: 0,
           y: 30,
@@ -54,9 +125,6 @@ className="
   [font-family:var(--font-league-spartan)]
 "
 
-
-
-
 style={{
   display: 'flex',
   alignItems: 'flex-end',
@@ -65,14 +133,14 @@ style={{
   whiteSpace: 'nowrap',
 
   fontFamily: 'Arial Black, Arial, Helvetica, sans-serif',
-  fontSize: '240px',
+  fontSize: `${fontSize}px`,
   fontWeight: 900,
 
   lineHeight: 1,
   letterSpacing: '0em',
 
-scaleX: scaleX,
-transformOrigin: 'center',
+  scaleX: scaleX,
+  transformOrigin: 'center',
 }}
       >
         {text.split('').map((letter, index) => (
@@ -88,6 +156,7 @@ transformOrigin: 'center',
       <style jsx>{`
 .service-outline-letter {
   display: inline-block;
+  
   pointer-events: none;
 
   color: transparent;
@@ -128,11 +197,7 @@ transformOrigin: 'center',
     drop-shadow(0 0 20px rgba(194, 65, 12, 0.12));
 }
 
-        @media (min-width: 769px) and (max-width: 1200px) {
-          .service-outline-word {
-            font-size: 220px !important;
-          }
-        }
+
       `}</style>
     </div>
   );

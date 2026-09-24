@@ -1,7 +1,10 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useSpring } from 'framer-motion';
+import { useEffect, useState, type PointerEvent } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { projects as portfolioProjects } from './OurWork';
 import {
   Compass,
   Palette,
@@ -9,12 +12,25 @@ import {
   Handshake,
 } from 'lucide-react';
 
+const portfolioLoopImages = portfolioProjects.flatMap((project) =>
+  project.images.map((src) => ({
+    src,
+    title: project.title,
+    category: project.category,
+  }))
+);
+
+const metricoolLoopImages = Array.from({ length: 7 }, (_, index) => ({
+  src: `/metricool/${index + 1}.webp`,
+  title: `Metricool Analytics ${index + 1}`,
+}));
+
 const cards = [
   {
     icon: Compass,
     title: 'Strategy First',
     description:
-      'Every project starts with research, planning, and a clear roadmap tailored to your business goals.',
+      'Every project starts with research, strategy, and a clear roadmap aligned with your brand goals and audience.',
   },
   {
     icon: Palette,
@@ -76,6 +92,42 @@ const rainDrops = Array.from(
 );
 
 export default function WhyHavelent() {
+  const cardRotateX = useSpring(0, { stiffness: 180, damping: 24 });
+  const cardRotateY = useSpring(0, { stiffness: 180, damping: 24 });
+  const resetWorkTilt = () => {
+    cardRotateX.set(0);
+    cardRotateY.set(0);
+  };
+  const tiltWorkCard = (event: PointerEvent<HTMLAnchorElement>) => {
+    if (event.pointerType !== 'mouse' || !window.matchMedia('(min-width: 768px) and (hover: hover) and (prefers-reduced-motion: no-preference)').matches) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    const pointerX = ((event.clientX - rect.left) / rect.width) * 100;
+    const pointerY = ((event.clientY - rect.top) / rect.height) * 100;
+
+    event.currentTarget.style.setProperty('--work-spot-x', `${pointerX}%`);
+    event.currentTarget.style.setProperty('--work-spot-y', `${pointerY}%`);
+    cardRotateX.set(-((event.clientY - rect.top) / rect.height - 0.5) * 10);
+    cardRotateY.set(((event.clientX - rect.left) / rect.width - 0.5) * 10);
+  };
+  const [isMobile, setIsMobile] = useState(
+    () =>
+      typeof window !== 'undefined' &&
+      window.innerWidth < 768
+  );
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
+
   return (
     <section
       id="our-work"
@@ -123,17 +175,25 @@ export default function WhyHavelent() {
 
         {/* Subtle moving warm haze */}
         <motion.div
-          animate={{
-            x: [0, 55, -25, 0],
-            y: [0, -20, 30, 0],
-            opacity: [0.16, 0.24, 0.18, 0.16],
-            scale: [1, 1.08, 0.97, 1],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
+          animate={
+            isMobile
+              ? undefined
+              : {
+                  x: [0, 55, -25, 0],
+                  y: [0, -20, 30, 0],
+                  opacity: [0.16, 0.24, 0.18, 0.16],
+                  scale: [1, 1.08, 0.97, 1],
+                }
+          }
+          transition={
+            isMobile
+              ? undefined
+              : {
+                  duration: 20,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }
+          }
           className="
             absolute
             -left-48
@@ -147,17 +207,25 @@ export default function WhyHavelent() {
         />
 
         <motion.div
-          animate={{
-            x: [0, -45, 25, 0],
-            y: [0, 35, -15, 0],
-            opacity: [0.11, 0.19, 0.13, 0.11],
-            scale: [1, 1.06, 0.98, 1],
-          }}
-          transition={{
-            duration: 24,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
+          animate={
+            isMobile
+              ? undefined
+              : {
+                  x: [0, -45, 25, 0],
+                  y: [0, 35, -15, 0],
+                  opacity: [0.11, 0.19, 0.13, 0.11],
+                  scale: [1, 1.06, 0.98, 1],
+                }
+          }
+          transition={
+            isMobile
+              ? undefined
+              : {
+                  duration: 24,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }
+          }
           className="
             absolute
             -right-52
@@ -362,15 +430,27 @@ export default function WhyHavelent() {
         {/* ========================================= */}
 
         <motion.div
-          initial={{
-            opacity: 0,
-          }}
-          whileInView={{
-            opacity: 1,
-          }}
-          transition={{
-            duration: 0.35,
-          }}
+          initial={
+            isMobile
+              ? false
+              : {
+                  opacity: 0,
+                }
+          }
+          whileInView={
+            isMobile
+              ? undefined
+              : {
+                  opacity: 1,
+                }
+          }
+          transition={
+            isMobile
+              ? undefined
+              : {
+                  duration: 0.35,
+                }
+          }
           viewport={{
             once: true,
           }}
@@ -401,20 +481,40 @@ export default function WhyHavelent() {
             </span>
           </h2>
 
-          <p
-            className="
-              mt-8
-              text-lg
-              leading-8
-              why-description
-            "
-          >
-            Helping business owners build brands
-            they are proud of.
-          </p>
+<p
+  className="
+    mt-8
+    text-lg
+    leading-8
+    why-description
+  "
+>
+  We help modern brands build stronger digital identities through strategic
+  creative solutions, thoughtful execution, and consistent attention to detail.
+</p>
 
         </motion.div>
 
+        {/* Mobile timeline */}
+        <div className="relative mt-16 space-y-10 border-l border-brand-orange/25 pl-8 md:hidden">
+          {cards.map((card, index) => {
+            const Icon = card.icon;
+            return (
+              <article key={card.title} className="relative pb-2">
+                <span className="absolute -left-[37px] top-1 h-[9px] w-[9px] rounded-full bg-brand-orange shadow-[0_0_14px_rgba(249,115,22,0.7)]" />
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full border border-brand-orange/35 bg-brand-orange/[0.08]">
+                    <Icon className="h-5 w-5 text-brand-orange" />
+                  </div>
+                  <span className="font-display text-xs tracking-[0.2em] text-brand-orange/65">0{index + 1}</span>
+                </div>
+                <h3 className="why-card-heading font-display text-2xl font-semibold">{card.title}</h3>
+                <p className="why-card-description mt-3 leading-7">{card.description}</p>
+              </article>
+            );
+          })}
+        </div>
+        <div className="md:flex md:flex-col">
         {/* ========================================= */}
         {/* OUR WORK CARD */}
         {/* ========================================= */}
@@ -425,54 +525,79 @@ export default function WhyHavelent() {
             mt-10
             flex
             justify-center
+            md:order-2
+            md:mb-0
+            md:mt-12
           "
         >
-
           <Link
             href="/our-work"
+            onPointerMove={tiltWorkCard}
+            onPointerLeave={(event) => {
+              resetWorkTilt();
+              event.currentTarget.style.setProperty('--work-spot-x', '82%');
+              event.currentTarget.style.setProperty('--work-spot-y', '48%');
+            }}
+            onPointerCancel={(event) => {
+              resetWorkTilt();
+              event.currentTarget.style.setProperty('--work-spot-x', '82%');
+              event.currentTarget.style.setProperty('--work-spot-y', '48%');
+            }}
+            onBlur={resetWorkTilt}
             className="
+              why-work-link
               group
               relative
               block
               w-full
-              max-w-3xl
+              max-w-5xl
             "
           >
-
             <motion.div
-              whileHover={{
-                y: -3,
-              }}
-              transition={{
-                duration: 0.35,
-                ease: [
-                  0.22,
-                  1,
-                  0.36,
-                  1,
-                ],
-              }}
+              whileHover={
+                isMobile
+                  ? undefined
+                  : {
+                      y: -4,
+                    }
+              }
+              transition={
+                isMobile
+                  ? undefined
+                  : {
+                      duration: 0.35,
+                      ease: [0.22, 1, 0.36, 1],
+                    }
+              }
               className="
                 why-card
                 relative
+                min-h-[220px]
                 overflow-hidden
-                rounded-[22px]
-                px-7
-                py-7
+                rounded-[28px]
+                px-8
+                py-10
                 text-left
-                backdrop-blur-xl
-                transition-all
+                md:backdrop-blur-xl
+                transition-colors
                 duration-500
-                md:px-10
-                md:py-8
+                sm:min-h-[240px]
+                sm:px-12
+                sm:py-12
+                md:min-h-[260px]
+                md:px-16
+                md:py-14
               "
               style={{
+                rotateX: isMobile ? 0 : cardRotateX,
+                rotateY: isMobile ? 0 : cardRotateY,
+                transformPerspective: isMobile ? undefined : 1200,
                 boxShadow:
-                  'inset 0 1px 0 rgba(255,255,255,0.05), 0 20px 60px -35px rgba(0,0,0,0.9)',
+                  'inset 0 1px 0 rgba(255,255,255,0.06), 0 30px 90px -35px rgba(0,0,0,0.95)',
               }}
             >
 
-              {/* Subtle glass highlight */}
+              {/* Main card glass highlight */}
               <div
                 className="
                   why-glass-highlight
@@ -482,26 +607,55 @@ export default function WhyHavelent() {
                 "
               />
 
-              {/* Orange ambient glow */}
+              <div aria-hidden="true" className="why-work-spotlight pointer-events-none absolute inset-0 hidden md:block" />
+
+              <div aria-hidden="true" className="why-work-collage pointer-events-none absolute inset-y-0 right-0 hidden w-[48%] grid-cols-3 gap-px overflow-hidden opacity-[0.10] transition-opacity duration-700 md:grid md:group-hover:opacity-[0.16]">
+                {portfolioLoopImages.slice(0, 3).map((item) => (
+                  <div key={`cta-collage-${item.src}`} className="relative overflow-hidden">
+                    <Image src={item.src} alt="" fill sizes="16vw" className="object-cover grayscale" />
+                  </div>
+                ))}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#111111] via-[#1c120d]/75 to-[#2b160d]/25" />
+              </div>
+
+              <div aria-hidden="true" className="why-work-reflection pointer-events-none absolute left-[8%] right-[8%] top-0 h-px" />
+
+              {/* Main orange ambient glow */}
               <div
                 className="
                   pointer-events-none
                   absolute
-                  -right-20
-                  -top-20
-                  h-48
-                  w-48
+                  -right-24
+                  -top-24
+                  h-72
+                  w-72
                   rounded-full
-                  opacity-0
-                  blur-[80px]
-                  transition-opacity
+                  opacity-30
+                  blur-[100px]
+                  transition-all
                   duration-700
-                  group-hover:opacity-100
+                  group-hover:scale-110
+                  group-hover:opacity-50
                 "
                 style={{
                   background:
-                    'radial-gradient(circle, rgba(249,115,22,0.25), transparent 70%)',
+                    'radial-gradient(circle, rgba(249,115,22,0.32), transparent 70%)',
                 }}
+              />
+
+              {/* Second subtle glow */}
+              <div
+                className="
+                  pointer-events-none
+                  absolute
+                  -bottom-32
+                  -left-20
+                  h-64
+                  w-64
+                  rounded-full
+                  bg-orange-500/[0.08]
+                  blur-[100px]
+                "
               />
 
               {/* Content */}
@@ -509,21 +663,23 @@ export default function WhyHavelent() {
                 className="
                   relative
                   flex
+                  h-full
                   items-center
                   justify-between
-                  gap-6
+                  gap-8
                 "
               >
 
-                <div>
+                <div className="max-w-3xl">
 
                   <span
                     className="
                       text-xs
                       font-semibold
                       uppercase
-                      tracking-[0.35em]
+                      tracking-[0.4em]
                       text-brand-orange
+                      sm:text-sm
                     "
                   >
                     Our Work
@@ -531,27 +687,33 @@ export default function WhyHavelent() {
 
                   <h3
                     className="
-                      mt-2
+                      mt-3
                       font-display
-                      text-2xl
+                      text-3xl
                       font-semibold
+                      leading-tight
                       why-card-heading
-                      md:text-3xl
+                      sm:text-4xl
+                      md:text-5xl
                     "
                   >
-                    Explore what we create.
+                    Explore Our{' '}
+                    <span className="text-gradient-orange">Creative Work</span>
                   </h3>
 
                   <p
                     className="
-                      mt-2
+                      mt-4
+                      max-w-2xl
                       text-sm
+                      leading-7
                       why-card-description
-                      md:text-base
+                      sm:text-base
+                      md:text-lg
                     "
                   >
-                    Discover the projects, stories,
-                    and experiences crafted by Havelent.
+                     Discover the creative work, digital experiences, and brand solutions crafted
+                    by Havelent for modern businesses and brands.
                   </p>
 
                 </div>
@@ -560,253 +722,118 @@ export default function WhyHavelent() {
                 <div
                   className="
                     flex
-                    h-11
-                    w-11
+                    h-12
+                    w-12
                     shrink-0
                     items-center
                     justify-center
                     rounded-full
                     border
-                    border-brand-orange/40
-                    text-brand-orange
+                    border-brand-orange/70
+                    bg-brand-orange
+                    text-white
+                    shadow-[0_14px_38px_-15px_rgba(249,115,22,0.95)]
                     transition-all
                     duration-500
-                    group-hover:border-brand-orange
-                    group-hover:bg-brand-orange
-                    group-hover:text-black
+                    group-hover:scale-110
+                    group-hover:border-[#ff9a4a]
+                    group-hover:bg-[#ff8a32]
+                    group-hover:text-white
+                    group-hover:shadow-[0_18px_46px_-12px_rgba(249,115,22,1)]
+                    sm:h-14
+                    sm:w-14
                   "
                   style={{
                     boxShadow:
-                      '0 0 20px -10px rgba(249,115,22,0.8)',
+                      '0 0 30px -10px rgba(249,115,22,0.8)',
                   }}
                 >
-
                   <span
                     className="
                       text-xl
                       transition-transform
                       duration-500
                       group-hover:translate-x-1
+                      sm:text-2xl
                     "
                   >
                     →
                   </span>
-
                 </div>
 
               </div>
 
-              {/* Bottom glow line */}
+              {/* Bottom orange accent */}
               <div
                 className="
-                  why-bottom-line
+                  why-work-light-line
                   absolute
                   bottom-0
-                  left-8
-                  right-8
+                  left-10
+                  right-10
                   h-px
+                  bg-gradient-to-r
+                  from-transparent
+                  via-brand-orange/30
+                  to-transparent
                   transition-all
                   duration-500
-                  group-hover:bg-brand-orange/40
+                  group-hover:via-brand-orange/70
                 "
               />
 
             </motion.div>
-
           </Link>
-
         </div>
 
         {/* ========================================= */}
-        {/* FEATURE CARDS */}
+        {/* PORTFOLIO MOTION WALL - DESKTOP */}
         {/* ========================================= */}
+        <div className="relative left-1/2 mt-20 hidden md:order-1 h-[clamp(560px,72vh,820px)] w-[calc(100vw-2rem)] max-w-[1720px] -translate-x-1/2 overflow-hidden rounded-[clamp(1.5rem,2vw,2.5rem)] border border-white/[0.09] bg-[#070707] p-3 shadow-[0_40px_120px_-45px_rgba(0,0,0,0.98)] md:grid md:grid-cols-[minmax(0,1fr)_clamp(220px,22vw,360px)] md:gap-3 lg:p-5 lg:gap-5 xl:p-6 xl:gap-6">
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_50%,rgba(249,115,22,0.12),transparent_34%),radial-gradient(circle_at_90%_15%,rgba(249,115,22,0.08),transparent_28%)]" />
 
-        <div
-          className="
-            mt-20
-            grid
-            grid-cols-1
-            gap-8
-            md:grid-cols-2
-          "
-        >
-
-          {cards.map(
-            (card, index) => {
-
-              const Icon =
-                card.icon;
-
-              return (
-                <motion.div
-                  key={index}
-                  initial={{
-                    opacity: 0,
-                    y: 40,
-                  }}
-                  whileInView={{
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  viewport={{
-                    once: true,
-                  }}
-                  transition={{
-                    duration: 0.6,
-                    delay:
-                      index * 0.15,
-                  }}
-                  className="
-                    why-card
-                    group
-                    relative
-                    overflow-hidden
-                    rounded-[24px]
-                    p-8
-                    backdrop-blur-xl
-                    transition-all
-                    duration-500
-                    hover:-translate-y-2
-                    md:p-10
-                  "
-                  style={{
-                    boxShadow:
-                      'inset 0 1px 0 rgba(255,255,255,0.04), 0 20px 60px -35px rgba(0,0,0,0.9)',
-                  }}
-                >
-
-                  {/* Glass highlight */}
-                  <div
-                    className="
-                      why-glass-highlight
-                      pointer-events-none
-                      absolute
-                      inset-0
-                    "
-                  />
-
-                  {/* Orange ambient glow */}
-                  <div
-                    className="
-                      pointer-events-none
-                      absolute
-                      -bottom-20
-                      right-0
-                      h-48
-                      w-48
-                      rounded-full
-                      opacity-40
-                      blur-[80px]
-                      transition-opacity
-                      duration-700
-                      group-hover:opacity-80
-                    "
-                    style={{
-                      background:
-                        'radial-gradient(circle, rgba(249,115,22,0.22), transparent 70%)',
-                    }}
-                  />
-
-                  {/* Card content */}
-                  <div
-                    className="
-                      relative
-                    "
-                  >
-
-                    {/* Icon */}
-                    <div
-                      className="
-                        mb-7
-                        flex
-                        h-14
-                        w-14
-                        items-center
-                        justify-center
-                        rounded-2xl
-                        border
-                        border-brand-orange/30
-                        bg-brand-orange/[0.06]
-                        transition-all
-                        duration-500
-                        group-hover:scale-105
-                        group-hover:border-brand-orange/60
-                      "
-                    >
-                      <Icon
-                        className="
-                          h-7
-                          w-7
-                          text-brand-orange
-                        "
-                      />
-                    </div>
-
-                    {/* Title */}
-                    <h3
-                      className="
-                        font-display
-                        text-2xl
-                        font-semibold
-                        why-card-heading
-                        md:text-3xl
-                      "
-                    >
-                      {card.title}
-                    </h3>
-
-                    {/* Orange accent line */}
-                    <div
-                      className="
-                        mt-4
-                        h-px
-                        w-16
-                        bg-brand-orange
-                        transition-all
-                        duration-500
-                        group-hover:w-24
-                      "
-                    />
-
-                    {/* Description */}
-                    <p
-                      className="
-                        mt-6
-                        max-w-xl
-                        leading-7
-                        why-card-description
-                        md:text-base
-                      "
-                    >
-                      {card.description}
-                    </p>
-
+          <div className="relative flex min-w-0 items-center overflow-hidden rounded-[1.4rem] border border-white/[0.07] bg-white/[0.025] [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+            <div className="portfolio-loop-horizontal flex w-max gap-3 px-2 lg:gap-5">
+              {[...portfolioLoopImages, ...portfolioLoopImages].map((item, index) => (
+                <div key={`horizontal-${index}-${item.src}`} className="group relative h-[clamp(390px,56vh,620px)] w-[clamp(285px,27vw,470px)] shrink-0 overflow-hidden rounded-[clamp(1rem,1.4vw,1.5rem)] border border-white/10 bg-[#101010]">
+                  <Image src={item.src} alt={item.title} fill sizes="(min-width: 1440px) 470px, (min-width: 768px) 27vw, 285px" className="object-cover transition-transform duration-700 group-hover:scale-[1.035]" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    <span className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-brand-orange">{item.category}</span>
+                    <p className="mt-1 font-display text-xl font-semibold text-white">{item.title}</p>
                   </div>
+                </div>
+              ))}
+            </div>
+          </div>
 
-                  {/* Bottom orange glow line */}
-                  <div
-                    className="
-                      why-bottom-line
-                      absolute
-                      bottom-0
-                      left-8
-                      right-8
-                      h-px
-                      transition-all
-                      duration-500
-                      group-hover:bg-brand-orange/40
-                    "
-                  />
+          <div className="relative overflow-hidden rounded-[1.4rem] border border-white/[0.07] bg-white/[0.025] [mask-image:linear-gradient(to_bottom,transparent,black_8%,black_92%,transparent)]">
+            <div className="portfolio-loop-vertical flex flex-col gap-3 py-2 lg:hidden">
+              {[...portfolioLoopImages, ...portfolioLoopImages].map((item, index) => (
+                <div key={`vertical-${index}-${item.src}`} className="group relative mx-1 h-[clamp(165px,22vh,250px)] shrink-0 overflow-hidden rounded-[clamp(0.8rem,1vw,1.15rem)] border border-white/10 bg-[#101010]">
+                  <Image src={item.src} alt="" fill sizes="22vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
+                  <p className="absolute bottom-3 left-3 right-3 truncate text-xs font-semibold text-white/90">{item.title}</p>
+                </div>
+              ))}
+            </div>
 
-                </motion.div>
-              );
-            }
-          )}
+            <div className="portfolio-loop-vertical hidden flex-col gap-5 py-2 lg:flex">
+              {[...metricoolLoopImages, ...metricoolLoopImages].map((item, index) => (
+                <div key={`metricool-vertical-${index}-${item.src}`} className="group relative mx-2 h-[clamp(165px,22vh,250px)] shrink-0 overflow-hidden rounded-[clamp(0.8rem,1vw,1.15rem)] border border-white/10 bg-[#101010]">
+                  <Image src={item.src} alt={item.title} fill sizes="(min-width: 1440px) 360px, 22vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
+                  <p className="absolute bottom-3 left-3 right-3 truncate text-xs font-semibold text-white/90">{item.title}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
 
         </div>
+
 
       </div>
-
       {/* ========================================= */}
       {/* THEME STYLES */}
       {/* ========================================= */}
@@ -929,13 +956,72 @@ export default function WhyHavelent() {
           color: var(--why-description);
         }
 
+        @property --work-spot-x {
+          syntax: '<percentage>';
+          inherits: true;
+          initial-value: 82%;
+        }
+
+        @property --work-spot-y {
+          syntax: '<percentage>';
+          inherits: true;
+          initial-value: 48%;
+        }
+
+        .why-work-link {
+          --work-spot-x: 82%;
+          --work-spot-y: 48%;
+          transition:
+            --work-spot-x 140ms cubic-bezier(0.22, 1, 0.36, 1),
+            --work-spot-y 140ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
         .why-card {
-          background: var(--why-card-bg);
-          border: 1px solid var(--why-card-border);
+          background: linear-gradient(125deg, #111111 0%, #1c120d 45%, #2b160d 100%);
+          border: 1px solid rgba(255,255,255,0.10);
         }
 
         .why-card:hover {
-          border-color: rgba(249,115,22,0.5);
+          border-color: rgba(249,115,22,0.55);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 34px 100px -32px rgba(249,115,22,0.28) !important;
+        }
+
+        .why-work-spotlight {
+          z-index: 1;
+          background: radial-gradient(
+            440px circle at var(--work-spot-x, 82%) var(--work-spot-y, 48%),
+            rgba(249,115,22,0.22),
+            rgba(249,115,22,0.07) 32%,
+            transparent 68%
+          );
+        }
+
+        .why-work-collage {
+          z-index: 0;
+          mask-image: linear-gradient(to right, transparent, black 28%, black);
+        }
+
+        .why-work-reflection {
+          z-index: 3;
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.32), transparent);
+        }
+
+        .why-work-light-line {
+          overflow: hidden;
+        }
+
+        .why-work-light-line::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          width: 34%;
+          background: linear-gradient(to right, transparent, #ff9a4a, transparent);
+          animation: workCardLight 3.8s ease-in-out infinite;
+        }
+
+        @keyframes workCardLight {
+          from { transform: translateX(-120%); }
+          to { transform: translateX(390%); }
         }
 
         .why-glass-highlight {
@@ -956,6 +1042,39 @@ export default function WhyHavelent() {
 
         :global(html.charcoal) .why-grain {
           mix-blend-mode: soft-light;
+        }
+
+
+        @keyframes portfolioLoopHorizontal {
+          from { transform: translate3d(0, 0, 0); }
+          to { transform: translate3d(calc(-50% - 0.5rem), 0, 0); }
+        }
+
+        @keyframes portfolioLoopVertical {
+          from { transform: translate3d(0, 0, 0); }
+          to { transform: translate3d(0, calc(-50% - 0.5rem), 0); }
+        }
+
+        .portfolio-loop-horizontal {
+          animation: portfolioLoopHorizontal 62s linear infinite;
+          will-change: transform;
+        }
+
+        .portfolio-loop-vertical {
+          animation: portfolioLoopVertical 74s linear infinite;
+          will-change: transform;
+        }
+
+        .portfolio-loop-horizontal:hover,
+        .portfolio-loop-vertical:hover {
+          animation-play-state: paused;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .portfolio-loop-horizontal,
+          .portfolio-loop-vertical {
+            animation-play-state: paused;
+          }
         }
 
         @keyframes havelentRain {
@@ -995,6 +1114,34 @@ export default function WhyHavelent() {
 
           100% {
             transform: translate3d(-115px, 130vh, 0) rotate(14deg);
+          }
+        }
+
+        @media (max-width: 767px) {
+          .why-havelent-section .why-card,
+          .why-havelent-section .why-card *,
+          .why-havelent-section .why-heading,
+          .why-havelent-section .why-description {
+            transition: none !important;
+            animation: none !important;
+          }
+
+          .why-havelent-section .why-card {
+            transform: none !important;
+            filter: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+          }
+
+          .why-havelent-section .why-card-heading,
+          .why-havelent-section .why-card-description {
+            filter: none !important;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+          }
+
+          .why-havelent-section .why-card:hover {
+            transform: none !important;
           }
         }
 

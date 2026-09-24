@@ -7,10 +7,9 @@ import { useRouter } from 'next/navigation';
 import ServiceOutlineText from '@/components/ServiceOutlineText';
 
 const headingWords = [
-  { text: 'Every', color: 'white' },
-  { text: 'Design,', color: 'gradient' },
-  { text: 'Builds a', color: 'white' },
-  { text: 'Brand.', color: 'gradient' },
+  { text: 'Graphic', color: 'white' },
+  { text: 'Design', color: 'gradient' },
+  { text: 'Agency.', color: 'white' },
 ];
 
 export default function Hero() {
@@ -102,8 +101,7 @@ export default function Hero() {
         }}
         className="mt-8 max-w-xl text-center text-base leading-relaxed text-white/60 sm:text-lg"
       >
-        We create impactful visual designs that strengthen your brand identity,
-        capture attention, and leave a lasting impression across every platform.
+        We provide professional graphic design services that bring your brand to life through distinctive logos, cohesive visual identities, and engaging creative assets for digital platforms, marketing, and modern brands.
       </motion.p>
 
       {/* CTA */}
@@ -120,7 +118,7 @@ export default function Hero() {
           whileTap={{ scale: 0.97 }}
           data-cursor="button"
           onClick={() => {
-            router.push('/#contact');
+            router.push('#contact');
 
             setTimeout(() => {
               document

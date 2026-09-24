@@ -6,19 +6,67 @@ import { Menu, X, Sun, Moon } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTheme } from './ThemeProvider';
 
-const LINKS = ['Home', 'Our Work', 'Services', 'About', 'Contact Us'];
+const LINKS = [
+  'Home',
+  'Reviews',
+  'Our Work',
+  'Services',
+  'About',
+  'Blog',
+  'Contact Us',
+];
 
 const SECTION_MAP: Record<string, string> = {
+  Reviews: 'reviews',
   Services: 'services',
   About: 'about',
+  Blog: 'blog',
   'Contact Us': 'contact',
 };
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [active, setActive] = useState('Home');
-  const router = useRouter();
-  const pathname = usePathname();
+const router = useRouter();
+const pathname = usePathname();
+
+useEffect(() => {
+  if (pathname === '/') {
+    return;
+  }
+
+if (pathname === '/our-work' || pathname.startsWith('/our-work/')) {
+  setActive('Our Work');
+  return;
+}
+
+if (pathname === '/blog' || pathname.startsWith('/blog/')) {
+  setActive('Blog');
+  return;
+}
+
+if (pathname === '/reviews' || pathname.startsWith('/reviews/')) {
+  setActive('Reviews');
+  return;
+}
+
+if (pathname === '/services' || pathname.startsWith('/services/')) {
+    setActive('Services');
+    return;
+  }
+
+  if (pathname === '/about' || pathname.startsWith('/about/')) {
+    setActive('About');
+    return;
+  }
+  
+
+  if (pathname === '/contact' || pathname.startsWith('/contact/')) {
+    setActive('Contact Us');
+    return;
+  }
+}, [pathname]);
+
 
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -101,9 +149,11 @@ export default function Navbar() {
 
     const sections = [
       'home',
+      'reviews',
       'our-work',
       'services',
       'about',
+      'blog',
       'contact',
     ];
 
@@ -121,21 +171,29 @@ export default function Navbar() {
 
         if (!visibleEntry) return;
 
-        switch (visibleEntry.target.id) {
-          case 'home':
-            setActive('Home');
-            break;
+switch (visibleEntry.target.id) {
+  case 'home':
+    setActive('Home');
+    break;
 
-          case 'our-work':
-            setActive('Our Work');
-            break;
+  case 'reviews':
+    setActive('Reviews');
+    break;
 
-          case 'services':
-            setActive('Services');
-            break;
+  case 'our-work':
+    setActive('Our Work');
+    break;
+
+  case 'services':
+    setActive('Services');
+    break;
 
           case 'about':
             setActive('About');
+            break;
+
+            case 'blog':
+           setActive('Blog');
             break;
 
           case 'contact':
@@ -241,6 +299,11 @@ setTimeout(() => {
    * ----------------------------------------------------
    */
   const handleNav = (link: string) => {
+    if (link === 'Contact Us' && document.getElementById('contact')) {
+      setOpen(false);
+      scrollToSection('contact');
+      return;
+    }
     setOpen(false);
 
     /*
@@ -293,6 +356,7 @@ if (link === 'Our Work') {
 
   return;
 }
+
 
     /*
      * SERVICES / ABOUT / CONTACT
@@ -354,27 +418,24 @@ if (link === 'Our Work') {
     >
       <nav
         className={`
+          navbar-orbit
           glass
+          relative
           flex
           items-center
           gap-1
-          rounded-full
+          rounded-[22px]
           border
           border-white/10
           px-2
           py-2
           transition-all
           duration-500
-          ${
-            scrolled
-              ? 'shadow-[0_8px_40px_-8px_rgba(249,115,22,0.35)]'
-              : ''
-          }
+          ${scrolled ? 'navbar-orbit-active' : ''}
         `}
         style={{
-          boxShadow: scrolled
-            ? '0 8px 40px -8px rgba(249,115,22,0.35), inset 0 1px 0 rgba(255,255,255,0.06)'
-            : '0 4px 24px -6px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06)',
+          boxShadow:
+            '0 4px 24px -6px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06)',
         }}
       >
         {/* ========================================= */}
@@ -393,18 +454,60 @@ if (link === 'Our Work') {
           "
           data-cursor="button"
         >
-          <img
-            src="/logos/horizontal-white.svg"
-            alt="Havelent"
+          <span
             className="
+              relative
+              block
               h-10
-              w-auto
-              transition-all
+              w-[120px]
+              transition-transform
               duration-300
               group-hover:scale-[1.03]
             "
-            draggable={false}
-          />
+          >
+            {/* Mobile/tablet keeps the current white logo. */}
+            <img
+              src="/logos/horizontal-white.svg"
+              alt="Havelent"
+              className="h-10 w-auto lg:hidden"
+              draggable={false}
+            />
+
+            {/* Desktop logo cross-fade follows the navbar glow state and timing. */}
+            <img
+              src="/logos/horizontal-white.svg"
+              alt="Havelent"
+              className={`
+                absolute
+                inset-0
+                hidden
+                h-10
+                w-auto
+                transition-opacity
+                duration-500
+                lg:block
+                ${scrolled ? 'opacity-0' : 'opacity-100'}
+              `}
+              draggable={false}
+            />
+            <img
+              src="/logos/logo.svg"
+              alt=""
+              aria-hidden="true"
+              className={`
+                absolute
+                inset-0
+                hidden
+                h-10
+                w-auto
+                transition-opacity
+                duration-500
+                lg:block
+                ${scrolled ? 'opacity-100' : 'opacity-0'}
+              `}
+              draggable={false}
+            />
+          </span>
         </button>
 
         {/* ========================================= */}
@@ -629,7 +732,7 @@ if (link === 'Our Work') {
             className="
               relative
               overflow-hidden
-              rounded-full
+              rounded-xl
               bg-gradient-to-r
               from-brand-accent
               to-brand-orange
@@ -902,7 +1005,7 @@ if (link === 'Our Work') {
                   relative
                   w-full
                   overflow-hidden
-                  rounded-full
+                  rounded-xl
                   bg-gradient-to-r
                   from-brand-accent
                   to-brand-orange
@@ -939,6 +1042,58 @@ if (link === 'Our Work') {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <style jsx>{`
+        @property --navbar-orbit-angle {
+          syntax: '<angle>';
+          inherits: false;
+          initial-value: 0deg;
+        }
+
+        @keyframes navbarOrbit {
+          to {
+            --navbar-orbit-angle: 360deg;
+          }
+        }
+
+        @media (min-width: 1024px) {
+          .navbar-orbit::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            z-index: 20;
+            border-radius: inherit;
+            padding: 1.5px;
+            pointer-events: none;
+            opacity: 0;
+            background: conic-gradient(
+              from var(--navbar-orbit-angle),
+              transparent 0deg 285deg,
+              rgba(194, 65, 12, 0.45) 310deg,
+              rgba(249, 115, 22, 1) 336deg,
+              rgba(255, 186, 120, 0.9) 346deg,
+              transparent 360deg
+            );
+            -webkit-mask:
+              linear-gradient(#000 0 0) content-box,
+              linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            transition: opacity 0.5s ease;
+          }
+
+          .navbar-orbit-active::before {
+            opacity: 1;
+            animation: navbarOrbit 3.8s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .navbar-orbit-active::before {
+            animation: none;
+          }
+        }
+      `}</style>
     </motion.header>
   );
 }

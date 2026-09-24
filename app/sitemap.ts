@@ -1,44 +1,25 @@
-import type { MetadataRoute } from "next";
+import type { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://havelent.com";
+  const baseUrl = 'https://havelent.com';
 
-  return [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-    },
-    {
-      url: `${baseUrl}/founder`,
-      lastModified: new Date(),
-    },
-    {
-      url: `${baseUrl}/our-work`,
-      lastModified: new Date(),
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-    },
-    {
-      url: `${baseUrl}/services/video-editing`,
-      lastModified: new Date(),
-    },
-    {
-      url: `${baseUrl}/services/graphic-design`,
-      lastModified: new Date(),
-    },
-    {
-      url: `${baseUrl}/services/digitalmarketing`,
-      lastModified: new Date(),
-    },
-    {
-      url: `${baseUrl}/services/social-media-management`,
-      lastModified: new Date(),
-    },
+  const paths = [
+    '',
+    '/founder',
+    '/our-work',
+    '/our-work/designs',
+    '/our-work/social-performance',
+    '/our-work/campaign-results',
+    '/blog',
+    '/services/video-editing',
+    '/services/graphic-design',
+    '/services/digital-marketing',
+    '/services/social-media-management',
+    '/services/web-development',
   ];
+
+  return paths.map((path) => ({
+    url: `${baseUrl}${path}`,
+    lastModified: new Date(),
+  }));
 }

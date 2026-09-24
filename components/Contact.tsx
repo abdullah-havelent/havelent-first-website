@@ -7,6 +7,7 @@ import { ArrowRight, Mail, MapPin, Phone } from 'lucide-react';
 export default function Contact() {
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -194,7 +195,7 @@ export default function Contact() {
               </span>
 
               <h2 className="mt-4 font-display text-[clamp(2rem,4vw,3rem)] font-semibold leading-tight text-white">
-                Let's build something
+                Let&apos;s build something
                 <span className="text-gradient-orange">
                   {' '}unforgettable.
                 </span>
@@ -246,6 +247,9 @@ export default function Contact() {
             <form
               onSubmit={async (e) => {
                 e.preventDefault();
+                if (loading) return;
+                setErrorMessage('');
+                setSent(false);
 
                 setLoading(true);
 
@@ -260,7 +264,7 @@ export default function Contact() {
 
                   const data = await res.json();
 
-                  if (data.success) {
+                  if (res.ok && data.success) {
                     setSent(true);
 
                     setFormData({
@@ -274,11 +278,11 @@ export default function Contact() {
                       setSent(false);
                     }, 3000);
                   } else {
-                    alert('Failed to send message.');
+                    setErrorMessage(data.message || 'Failed to send message. Please try again.');
                   }
                 } catch (error) {
                   console.error(error);
-                  alert('Something went wrong.');
+                  setErrorMessage('Unable to send your message. Check your connection and try again.');
                 }
 
                 setLoading(false);
@@ -292,7 +296,8 @@ export default function Contact() {
                 <input
                   required
                   type="text"
-                  placeholder="Full name"
+                  aria-label="Full name"
+                placeholder="Full name"
                   value={formData.name}
                   onChange={(e) =>
                     setFormData({
@@ -306,7 +311,8 @@ export default function Contact() {
                 <input
                   required
                   type="email"
-                  placeholder="Email address"
+                  aria-label="Email address"
+                placeholder="Email address"
                   value={formData.email}
                   onChange={(e) =>
                     setFormData({
@@ -321,6 +327,7 @@ export default function Contact() {
 
               {/* Company */}
               <input
+                aria-label="Company (optional)"
                 placeholder="Company (optional)"
                 value={formData.company}
                 onChange={(e) =>
@@ -336,6 +343,7 @@ export default function Contact() {
               <textarea
                 required
                 rows={4}
+                aria-label="Project details"
                 placeholder="Tell us about your project..."
                 value={formData.message}
                 onChange={(e) =>
@@ -347,11 +355,15 @@ export default function Contact() {
                 className="resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none transition-colors focus:border-brand-orange"
               />
 
+              {errorMessage && <p role="alert" className="text-sm text-red-300">{errorMessage}</p>}
+              {sent && <p role="status" className="text-sm text-green-300">Your message has been sent. We will be in touch soon.</p>}
               {/* Submit */}
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
+                disabled={loading}
+                aria-busy={loading}
                 data-cursor="button"
                 className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-brand-accent to-brand-orange px-6 py-3.5 text-sm font-semibold text-white"
                 style={{

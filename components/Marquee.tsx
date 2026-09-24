@@ -16,8 +16,6 @@ const ITEMS = [
 export default function Marquee() {
   const { theme } = useTheme();
 
-  const loop = [...ITEMS, ...ITEMS];
-
   return (
     <section
       className="
@@ -43,30 +41,39 @@ export default function Marquee() {
           willChange: 'transform',
         }}
       >
-        {loop.map((item, i) => (
+        {[0, 1].map((groupIndex) => (
           <div
-            key={i}
-            className={`
-              mx-8
-              flex
-              items-center
-              gap-8
-              text-sm
-              font-semibold
-              tracking-[0.08em]
-              uppercase
-              ${
-                theme === 'charcoal'
-                  ? 'text-white'
-                  : 'text-black/70'
-              }
-            `}
+            key={groupIndex}
+            aria-hidden={groupIndex === 1}
+            className="flex min-w-[100vw] shrink-0 justify-around"
           >
-            <span>{item}</span>
+            {ITEMS.map((item, itemIndex) => (
+              <div
+                key={`${groupIndex}-${itemIndex}`}
+                className={`
+                  mx-8
+                  flex
+                  shrink-0
+                  items-center
+                  gap-8
+                  text-sm
+                  font-semibold
+                  tracking-[0.08em]
+                  uppercase
+                  ${
+                    theme === 'charcoal'
+                      ? 'text-white'
+                      : 'text-black/70'
+                  }
+                `}
+              >
+                <span>{item}</span>
 
-            <span className="text-2xl text-brand-orange">
-              •
-            </span>
+                <span className="text-2xl text-brand-orange">
+                  •
+                </span>
+              </div>
+            ))}
           </div>
         ))}
       </div>

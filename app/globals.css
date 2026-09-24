@@ -67,8 +67,9 @@ html.charcoal {
     @apply border-border;
   }
   html {
-    scroll-behavior: smooth;
-  }
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
   body {
     @apply bg-background text-foreground;
     background-color: #090909;
@@ -78,15 +79,6 @@ html.charcoal {
     overflow-x: hidden;
 position: relative;
     
-  }
-}
-
-/* Custom cursor — hide native on capable devices */
-@media (hover: hover) and (pointer: fine) {
-  @media (min-width: 1024px) {
-    * {
-      cursor: auto !important;
-    }
   }
 }
 
@@ -105,6 +97,21 @@ position: relative;
   background: linear-gradient(180deg, #FF6A00, #F97316);
 }
 
+/* Consistent pointer feedback for interactive elements */
+a[href],
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+[role="link"]:not([aria-disabled="true"]),
+summary,
+label[for],
+select {
+  cursor: pointer !important;
+}
+
+button:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed !important;
+}
 /* Selection */
 ::selection {
   background: rgba(249, 115, 22, 0.3);
@@ -122,9 +129,13 @@ position: relative;
 
 /* Glass surface */
 .glass {
-  background: rgba(15, 15, 15, 0.55);
+  isolation: isolate;
+  background: rgba(15, 15, 15, 0.82);
   backdrop-filter: blur(20px) saturate(140%);
   -webkit-backdrop-filter: blur(20px) saturate(140%);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* Grid background */
@@ -247,9 +258,9 @@ body::before {
 
   background-size: 50px 50px;
 
-  opacity: 0.3;
+  opacity: 0.035;
 
-  mix-blend-mode: overlay;
+  mix-blend-mode: normal;
 }
 
 
@@ -292,4 +303,42 @@ html.charcoal section {
 /* Existing black Tailwind backgrounds */
 html.charcoal .bg-black {
   background-color: #1C1C1C !important;
+}
+
+html {
+  font-size: 95%;
+}
+/* Static dividers between page sections, including wrapped homepage sections. */
+section:not(section section):not(article section),
+footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+
+
+
+@media (max-width: 767px) {
+  .mobile-no-motion,
+  .mobile-no-motion * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .mobile-no-motion {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .review-scroll-region {
+    scrollbar-width: none !important;
+    scrollbar-gutter: auto !important;
+    -ms-overflow-style: none;
+  }
+
+  .review-scroll-region::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
 }

@@ -7,10 +7,9 @@ import { useRouter } from 'next/navigation';
 import ServiceOutlineText from '@/components/ServiceOutlineText';
 
 const headingWords = [
-  { text: "Build", color: "white" },
-  { text: "Your", color: "gradient" },
   { text: "Social", color: "white" },
-  { text: "Presence.", color: "gradient" },
+  { text: "Media", color: "gradient" },
+  { text: "Management", color: "white" },
 ];
 
 export default function Hero() {
@@ -93,18 +92,19 @@ export default function Hero() {
       </h1>
 
       {/* Subtitle */}
-      <motion.p
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{
-          duration: 0.8,
-          delay: 0.3 + headingWords.length * 0.1,
-        }}
-        className="mt-8 max-w-xl text-center text-base leading-relaxed text-white/60 sm:text-lg"
-      >
-        We help brands grow through strategic content, consistent posting,
-        community engagement, and data-driven social media management.
-      </motion.p>
+   <motion.p
+  initial={{ opacity: 0, y: 24 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{
+    duration: 0.8,
+    delay: 0.3 + headingWords.length * 0.1,
+  }}
+  className="mt-8 max-w-xl text-center text-base leading-relaxed text-white/60 sm:text-lg"
+>
+  We provide professional social media management services that help brands
+  build a stronger online presence through strategic content, consistent
+  publishing, audience engagement, and data-driven growth.
+</motion.p>
 
       {/* CTA */}
       <motion.div
@@ -123,7 +123,7 @@ export default function Hero() {
           whileTap={{ scale: 0.97 }}
           data-cursor="button"
           onClick={() => {
-            router.push('/#contact');
+            router.push('#contact');
 
             setTimeout(() => {
               document

@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { z } from "zod";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const contactSchema = z.object({
+  name: z.string().trim().min(1).max(200),
+  email: z.string().trim().email().max(254),
+  company: z.string().trim().max(300).optional(),
+  message: z.string().trim().min(1).max(10000),
+});
 
 function escapeHtml(text: string) {
   return text
@@ -14,7 +20,15 @@ function escapeHtml(text: string) {
 
 export async function POST(req: Request) {
   try {
-    const { name, email, company, message } = await req.json();
+    const parsed = contactSchema.safeParse(await req.json().catch(() => null));
+    if (!parsed.success) {
+      return NextResponse.json({ success: false, message: "Please enter your name, a valid email, and project details (up to 10,000 characters)." }, { status: 400 });
+    }
+    const { name, email, company, message } = parsed.data;
+    if (!process.env.RESEND_API_KEY) {
+      return NextResponse.json({ success: false, message: "Contact service is temporarily unavailable. Please email abdullah@havelent.com." }, { status: 503 });
+    }
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     if (!name?.trim() || !email?.trim() || !message?.trim()) {
       return NextResponse.json(
@@ -61,6 +75,10 @@ export async function POST(req: Request) {
         </div>
       `,
     });
+
+    if (notification.error) {
+      return NextResponse.json({ success: false, message: "Your message could not be sent. Please try again or email abdullah@havelent.com." }, { status: 502 });
+    }
 
     // 2. Send automatic confirmation to the client
     const autoReply = await resend.emails.send({
@@ -113,13 +131,8 @@ export async function POST(req: Request) {
 
         </div>
       `,
-    });
-
-    return NextResponse.json({
-      success: true,
-      notification,
-      autoReply,
-    });
+    }).catch(() => ({ error: { message: 'Confirmation unavailable' } }));
+    return NextResponse.json({ success: true, confirmationSent: !autoReply.error });
   } catch (error) {
     console.error(error);
 

@@ -7,10 +7,9 @@ import { useRouter } from 'next/navigation';
 import ServiceOutlineText from '@/components/ServiceOutlineText';
 
 const headingWords = [
-  { text: 'Grow', color: 'white' },
-  { text: 'Your', color: 'gradient' },
-  { text: 'Business', color: 'white' },
-  { text: 'Online.', color: 'gradient' },
+  { text: 'Digital', color: 'white' },
+  { text: 'Marketing', color: 'gradient' },
+  { text: 'Services', color: 'white' },
 ];
 
 export default function Hero() {
@@ -119,8 +118,8 @@ export default function Hero() {
         }}
         className="mt-8 max-w-xl text-center text-base leading-relaxed text-white/60 sm:text-lg"
       >
-        We create data-driven marketing campaigns that attract the right audience,
-        generate quality leads, and help your business grow across every platform.
+        We deliver data-driven digital marketing services that attract the right audience,
+        generate quality leads, strengthen your online presence, and turn marketing campaigns into measurable business growth.
       </motion.p>
 
       {/* CTA */}
@@ -150,7 +149,7 @@ export default function Hero() {
           }}
           data-cursor="button"
           onClick={() => {
-            router.push('/#contact');
+            router.push('#contact');
 
             setTimeout(() => {
               document

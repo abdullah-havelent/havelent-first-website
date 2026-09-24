@@ -1,5 +1,6 @@
 'use client';
 
+import Contact from '@/components/Contact';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Linkedin } from 'lucide-react';
@@ -104,7 +105,7 @@ return (
 
             <div className="mt-10 flex flex-wrap gap-4">
               <Link
-                href="/#contact"
+                href="#contact"
                 className="group relative inline-flex overflow-hidden rounded-full bg-gradient-to-r from-brand-accent to-brand-orange px-7 py-3 font-medium text-white transition-all duration-300 hover:scale-105"
                 style={{
                   boxShadow: '0 0 20px -4px rgba(249,115,22,0.5)',
@@ -236,7 +237,7 @@ return (
 
 
       {/* Principles */}
-      <section className="px-6 pb-24">
+      <section className="px-6 py-24">
         <div className="mx-auto max-w-7xl">
 
           <motion.div
@@ -334,7 +335,7 @@ return (
 
 
       {/* CTA */}
-      <section className="px-6 pb-32">
+      <section className="px-6 pt-24 pb-32">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -351,7 +352,7 @@ return (
           </p>
 
           <Link
-            href="/#contact"
+            href="#contact"
             className="group relative mt-10 inline-flex overflow-hidden rounded-full bg-gradient-to-r from-brand-accent to-brand-orange px-8 py-4 font-medium text-white transition-all duration-300 hover:scale-105"
             style={{
               boxShadow: '0 0 20px -4px rgba(249,115,22,0.5)',
@@ -366,6 +367,7 @@ return (
         </motion.div>
       </section>
 
+      <Contact />
       <Footer />
 
     </main>

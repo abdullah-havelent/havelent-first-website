@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { motion, useMotionValue } from 'framer-motion';
 
 export default function CustomCursor() {
   const [hovering, setHovering] = useState<'none' | 'button' | 'card'>('none');
@@ -9,18 +9,6 @@ export default function CustomCursor() {
 
   const x = useMotionValue(-100);
   const y = useMotionValue(-100);
-
-  const cx = useSpring(x, {
-  stiffness: 450,
-  damping: 35,
-  mass: 0.15,
-});
-
-const cy = useSpring(y, {
-  stiffness: 450,
-  damping: 35,
-  mass: 0.15,
-});
 
   useEffect(() => {
     const isFinePointer =
@@ -64,7 +52,7 @@ const cy = useSpring(y, {
     <motion.div
       aria-hidden
       className="pointer-events-none fixed left-0 top-0 z-[9999] hidden lg:block"
-      style={{ x: cx, y: cy }}
+      style={{ x, y }}
     >
       <motion.div
         className="-translate-x-1/2 -translate-y-1/2 rounded-full"

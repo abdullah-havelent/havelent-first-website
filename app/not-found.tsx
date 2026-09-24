@@ -51,9 +51,9 @@ export default function NotFound() {
         </h2>
 
         <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-white/60">
-          The page you're looking for isn't here.
+          The page you&apos;re looking for isn&apos;t here.
           <br />
-          Let's get you back on track.
+          Let&apos;s get you back on track.
         </p>
 
         <Link
