@@ -5,9 +5,10 @@ import ReviewFilterSelect from '@/components/ReviewFilterSelect';
 import Contact from '@/components/Contact';
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { AlertCircle, Check, ChevronDown, ChevronRight, Grid2X2, Rows3, Star, X } from 'lucide-react';
+import { AlertCircle, Check, ChevronDown, ChevronRight, Grid2X2, Rows3, X } from 'lucide-react';
 import { services } from '@/components/reviewsData';
 import { supabase } from '@/lib/supabase';
+import StarRating from '@/components/StarRating';
 import Footer from '@/components/Footer';
 
 type DatabaseReview = {
@@ -733,26 +734,46 @@ const { error } = await supabase
                   Rating
                 </label>
 
-                <div className="flex gap-2">
+                <div className="flex flex-col items-start gap-3">
+                  <div className="flex w-full flex-wrap items-center gap-x-3 gap-y-1.5 sm:flex-nowrap">
+                    <div className="shrink-0 sm:hidden">
+                      <StarRating value={rating} size={23} onChange={setRating} />
+                    </div>
+                    <div className="hidden shrink-0 sm:block">
+                      <StarRating value={rating} size={26} onChange={setRating} />
+                    </div>
+                    <span className="shrink-0 whitespace-nowrap text-sm font-medium text-white/60 sm:min-w-10">
+                      {rating > 0 ? `${rating}/5` : '—'}
+                    </span>
+                    <span className="w-full text-[10px] font-normal tracking-wide text-white/30 sm:w-auto sm:min-w-0 sm:flex-1 sm:whitespace-nowrap sm:text-[11px] sm:text-white/25">
+                      Double click for a full star or choose from slider
+                    </span>
+                  </div>
 
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      onClick={() => setRating(star)}
-                      className="transition-transform hover:scale-110"
-                    >
-                      <Star
-                        size={23}
-                        className={
-                          star <= rating
-                            ? 'fill-brand-orange text-brand-orange'
-                            : 'text-white/20'
-                        }
+                  <div className="flex w-full max-w-sm items-center gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.025] px-3.5 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                    <span className="min-w-6 text-center text-[10px] font-semibold tracking-wide text-white/35">0.5</span>
+                    <div className="relative flex min-w-0 flex-1 items-center">
+                      <div aria-hidden="true" className="pointer-events-none absolute inset-x-[5px] top-1/2 flex -translate-y-1/2 justify-between">
+                        {Array.from({ length: 10 }, (_, index) => (
+                          <span key={index} className="h-1 w-1 rounded-full bg-white/20" />
+                        ))}
+                      </div>
+                      <input
+                        type="range"
+                        min="0.5"
+                        max="5"
+                        step="0.5"
+                        value={Math.max(0.5, rating)}
+                        onChange={(event) => setRating(Number(event.target.value))}
+                        aria-label="Choose a rating from 0.5 to 5 stars"
+                        className="rating-slider relative z-10 w-full cursor-pointer"
+                        style={{
+                          background: `linear-gradient(to right, #f97316 0%, #f97316 ${((Math.max(0.5, rating) - 0.5) / 4.5) * 100}%, rgba(255,255,255,0.12) ${((Math.max(0.5, rating) - 0.5) / 4.5) * 100}%, rgba(255,255,255,0.12) 100%)`,
+                        }}
                       />
-                    </button>
-                  ))}
-
+                    </div>
+                    <span className="min-w-6 text-center text-[10px] font-semibold tracking-wide text-white/35">5</span>
+                  </div>
                 </div>
               </div>
 

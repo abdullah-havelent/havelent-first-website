@@ -63,10 +63,11 @@ const PRINCIPLES = [
 ];
 
 const STATS = [
-  { value: '105+', label: 'Projects Delivered' },
-  { value: '45+', label: 'Happy Clients' },
-  { value: '101%', label: 'Custom Work' },
-  { value: '20+', label: 'Industries Served Globally' },
+  { value: '105+', label: 'Projects Delivered', href: null },
+  { value: '45+', label: 'Happy Clients', href: null },
+  { value: '101%', label: 'Custom Work', href: null },
+  { value: '30+', label: 'Industries Served Globally', href: null },
+  { value: '4.8+', label: 'Client Rating', href: '/reviews' },
 ];
 
 export default function About() {
@@ -138,7 +139,7 @@ export default function About() {
           </motion.div>
         </div>
 
-        <div className="mt-20 grid grid-cols-2 gap-x-8 gap-y-10 md:mt-28 lg:grid-cols-4 lg:gap-12">
+        <div className="mt-20 grid grid-cols-2 gap-x-8 gap-y-10 md:mt-28 lg:grid-cols-5 lg:gap-8">
           {STATS.map((stat, index) => (
             <motion.div data-about-motion="true"
               key={stat.label}
@@ -147,12 +148,29 @@ export default function About() {
               viewport={{ once: true }}
               transition={{ duration: 0.55, delay: 0.08 * index }}
             >
-              <strong className="font-display text-4xl font-semibold leading-none text-gradient-orange sm:text-5xl">
-                {stat.value}
-              </strong>
-              <p className="mt-3 text-xs font-medium uppercase tracking-[0.14em] text-white/45 sm:text-sm">
-                {stat.label}
-              </p>
+              {stat.href ? (
+                <Link
+                  href={stat.href}
+                  aria-label="Open client reviews"
+                  className="group block focus-visible:rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-orange"
+                >
+                  <strong className="font-display text-4xl font-semibold leading-none text-gradient-orange sm:text-5xl">
+                    {stat.value}
+                  </strong>
+                  <p className="mt-3 text-xs font-medium uppercase tracking-[0.14em] text-white/45 sm:text-sm">
+                    {stat.label}
+                  </p>
+                </Link>
+              ) : (
+                <>
+                  <strong className="font-display text-4xl font-semibold leading-none text-gradient-orange sm:text-5xl">
+                    {stat.value}
+                  </strong>
+                  <p className="mt-3 text-xs font-medium uppercase tracking-[0.14em] text-white/45 sm:text-sm">
+                    {stat.label}
+                  </p>
+                </>
+              )}
             </motion.div>
           ))}
         </div>

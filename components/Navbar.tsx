@@ -234,12 +234,19 @@ switch (visibleEntry.target.id) {
 
     setManualNav(true);
 
-    const navOffset = 0;
+    const navbar = document.querySelector<HTMLElement>('[data-site-navbar]');
+    const navbarBottom = navbar?.getBoundingClientRect().bottom ?? 88;
+    const sectionPaddingTop = Number.parseFloat(
+      window.getComputedStyle(section).paddingTop,
+    ) || 0;
+    const contentGap = window.innerWidth < 768 ? 16 : 24;
 
     const sectionTop =
       section.getBoundingClientRect().top +
-      window.scrollY -
-      navOffset;
+      window.scrollY +
+      sectionPaddingTop -
+      navbarBottom -
+      contentGap;
 
     window.scrollTo({
       top: Math.max(0, sectionTop),
@@ -393,6 +400,7 @@ if (link === 'Our Work') {
    */
   return (
     <motion.header
+      data-site-navbar
       initial={{
         y: -80,
         opacity: 0,
@@ -469,7 +477,7 @@ if (link === 'Our Work') {
             <img
               src="/logos/horizontal-white.svg"
               alt="Havelent"
-              className="h-10 w-auto lg:hidden"
+              className="h-10 w-auto xl:hidden"
               draggable={false}
             />
 
@@ -485,7 +493,7 @@ if (link === 'Our Work') {
                 w-auto
                 transition-opacity
                 duration-500
-                lg:block
+                xl:block
                 ${scrolled ? 'opacity-0' : 'opacity-100'}
               `}
               draggable={false}
@@ -502,7 +510,7 @@ if (link === 'Our Work') {
                 w-auto
                 transition-opacity
                 duration-500
-                lg:block
+                xl:block
                 ${scrolled ? 'opacity-100' : 'opacity-0'}
               `}
               draggable={false}
@@ -514,7 +522,7 @@ if (link === 'Our Work') {
         {/* DESKTOP LINKS */}
         {/* ========================================= */}
 
-        <div className="ml-1 hidden items-center gap-1 md:flex">
+        <div className="ml-1 hidden items-center gap-1 xl:flex">
           {LINKS.map((link, i) => (
             <motion.div
               key={link}
@@ -584,7 +592,7 @@ if (link === 'Our Work') {
         {/* DESKTOP ACTIONS */}
         {/* ========================================= */}
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-3 xl:flex">
 
           {/* DESKTOP THEME BUTTON */}
 
@@ -796,7 +804,7 @@ if (link === 'Our Work') {
             duration-300
             hover:border-orange-500/50
             hover:text-orange-400
-            md:hidden
+            xl:hidden
           "
         >
           <AnimatePresence
@@ -868,7 +876,7 @@ if (link === 'Our Work') {
             duration-300
             hover:border-orange-500/40
             hover:text-orange-400
-            md:hidden
+            xl:hidden
           "
           aria-label="Menu"
         >
@@ -944,7 +952,7 @@ if (link === 'Our Work') {
               border
               border-white/10
               p-4
-              md:hidden
+              xl:hidden
             "
           >
             {LINKS.map((link, index) => (

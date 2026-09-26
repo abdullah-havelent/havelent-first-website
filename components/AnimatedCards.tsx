@@ -162,7 +162,7 @@ export default function AnimatedCards() {
               <MouseTilt disabled={isMobile}>
               <Link
                 href={service.href}
-                className={`group relative block min-h-[560px] overflow-hidden rounded-[30px] border border-orange-500/35 bg-[#070707] transition-all duration-500 sm:w-full ${
+                className={`group relative flex h-full min-h-[640px] overflow-hidden rounded-[30px] border border-orange-500/35 bg-[#070707] transition-all duration-500 sm:w-full ${
                   isMobile
                     ? ''
                     : 'hover:-translate-y-2 hover:border-orange-500/70 hover:shadow-[0_25px_80px_rgba(249,115,22,0.18)]'
@@ -330,7 +330,7 @@ export default function AnimatedCards() {
                 {/* CONTENT */}
                 {/* ================================================= */}
 
-                <div className="relative z-10 flex h-full flex-col items-center px-7 py-10 text-center">
+                <div className="relative z-10 flex min-h-[640px] w-full flex-col items-center px-6 py-10 text-center sm:px-7">
 
                   {/* ICON */}
 
@@ -383,7 +383,7 @@ export default function AnimatedCards() {
 
                   {/* TITLE */}
 
-                  <div className="mt-8 flex h-[65px] w-full items-start justify-center">
+                  <div className="mt-8 flex min-h-[72px] w-full items-start justify-center">
 
                     <h3
                       className={`max-w-[270px] font-display text-[30px] font-semibold leading-[1.08] text-white ${
@@ -411,7 +411,7 @@ export default function AnimatedCards() {
 
                   {/* DESCRIPTION */}
 
-                  <div className="mt-7 flex h-[70px] w-full items-start justify-center">
+                  <div className="mt-7 flex min-h-[84px] w-full items-start justify-center">
 
                     <p className="max-w-[280px] text-base leading-7 text-white/60">
                       {service.description}
@@ -422,7 +422,7 @@ export default function AnimatedCards() {
 
                   {/* VIEW MORE */}
 
-                  <div className="mt-auto flex h-[40px] items-end pt-10">
+                  <div className="mt-auto flex items-center pt-8">
 
                     <span
                       className={`inline-flex items-center gap-2 font-display text-base text-orange-500 transition-all duration-300 ${

@@ -57,26 +57,29 @@ export default function VideoEditingHero() {
       className="
         relative
         flex
-        min-h-[88vh]
+        min-h-[100svh]
+        xl:min-h-[88vh]
         w-full
         flex-col
         items-center
-        justify-start
+        justify-center
+        xl:justify-start
         overflow-hidden
         bg-brand-dark
-        px-6
-        pt-32
-        pb-8
+        px-5
+        pb-16
+        pt-28
+        sm:px-6
+        sm:pb-20
+        sm:pt-32
+        xl:pb-8
       "
     >
 
       {/* =========================================================
           GIANT VIDEO EDITING OUTLINE
           ========================================================= */}
-
-      <ServiceOutlineText text="VIDEO EDITING" />
-
-      {/* =========================================================
+{/* =========================================================
           BACKGROUND GRID
           ========================================================= */}
 
@@ -208,7 +211,7 @@ export default function VideoEditingHero() {
           w-full
           flex-col
           items-center
-          pt-20
+          xl:pt-20
         "
       >
 
@@ -220,9 +223,10 @@ export default function VideoEditingHero() {
           className="
             font-display
             text-center
-            text-[clamp(2.75rem,7vw,6.5rem)]
+            text-[clamp(2.6rem,11vw,6.5rem)]
             font-semibold
-            leading-[1.2]
+            leading-[1.02]
+            xl:leading-[1.2]
             tracking-tight
           "
         >
@@ -230,9 +234,10 @@ export default function VideoEditingHero() {
             <span
               key={`${word.text}-${index}`}
               className="
-                mr-3
+                mx-1
+                sm:mx-1.5
                 inline-block
-                overflow-hidden
+                overflow-visible
                 align-bottom
               "
             >
@@ -285,10 +290,11 @@ export default function VideoEditingHero() {
             delay: 0.7,
           }}
           className="
-            mt-8
+            mt-6
             max-w-xl
             text-center
-            text-base
+            text-sm
+            sm:mt-8
             leading-relaxed
             text-white/60
             sm:text-lg
@@ -315,12 +321,19 @@ export default function VideoEditingHero() {
             delay: 0.9,
           }}
           className="
-            mt-10
+            mt-8
             flex
+            w-full
+            max-w-sm
             flex-col
-            items-center
-            gap-4
+            items-stretch
+            gap-3
+            sm:mt-10
+            sm:w-auto
+            sm:max-w-none
             sm:flex-row
+            sm:items-center
+            sm:gap-4
           "
         >
 
@@ -352,6 +365,7 @@ export default function VideoEditingHero() {
               relative
               inline-flex
               items-center
+              justify-center
               gap-2
               overflow-hidden
               rounded-full
@@ -439,6 +453,8 @@ export default function VideoEditingHero() {
 
         </motion.div>
       </div>
+      <ServiceOutlineText text="VIDEO EDITING" />
+
     </section>
   );
 }

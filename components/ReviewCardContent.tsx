@@ -1,6 +1,6 @@
 'use client';
 
-import { Star } from 'lucide-react';
+import StarRating from '@/components/StarRating';
 
 type ReviewCardContentProps = {
   name: string;
@@ -41,10 +41,8 @@ export default function ReviewCardContent({ name, role, text, rating, category, 
             <p className="mt-1 break-words text-sm leading-5 text-white/50">{role}</p>
           </div>
         </div>
-        <div role="img" aria-label={`${rating} out of 5 stars`} className="flex w-full shrink-0 items-center gap-1 md:w-auto">
-          {Array.from({ length: rating }, (_, index) => (
-            <Star key={index} size={16} aria-hidden="true" className="fill-brand-orange text-brand-orange" />
-          ))}
+        <div className="flex w-full shrink-0 items-center md:w-auto">
+          <StarRating value={rating} />
           <span aria-hidden="true" className="ml-2 text-sm font-medium text-white/70">{rating}/5</span>
         </div>
       </div>

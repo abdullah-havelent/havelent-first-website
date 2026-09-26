@@ -41,11 +41,9 @@ export default function WebDevelopmentHero() {
     <section
       id="home"
       onMouseMove={handleMouseMove}
-      className="relative flex min-h-[88vh] w-full flex-col items-center justify-start overflow-hidden px-6 pb-8 pt-32"
+      className="relative flex min-h-[100svh] w-full flex-col items-center justify-center overflow-hidden px-5 pb-16 pt-28 sm:px-6 sm:pb-20 sm:pt-32 xl:min-h-[88vh] xl:justify-start xl:pb-8"
     >
-      <ServiceOutlineText text="WEB DEVELOPMENT" scaleX={0.72} />
-
-      <div className="bg-grid pointer-events-none absolute inset-0 opacity-[0.08]" />
+<div className="bg-grid pointer-events-none absolute inset-0 opacity-[0.08]" />
       <motion.div
         style={{ x: tx, y: ty }}
         className="pointer-events-none absolute -left-32 top-24 h-[420px] w-[420px] rounded-full bg-gradient-to-br from-brand-orange/30 to-brand-red/10 blur-[120px]"
@@ -57,9 +55,9 @@ export default function WebDevelopmentHero() {
       <div className="noise" />
       <div className="pointer-events-none absolute bottom-0 left-0 h-40 w-full bg-gradient-to-b from-transparent via-black/30 to-black" />
 
-      <h1 className="relative z-10 mt-20 max-w-6xl text-center font-display text-[clamp(2.75rem,7vw,6.5rem)] font-semibold leading-[1.1] tracking-tight">
+      <h1 className="relative z-10 max-w-6xl text-center font-display text-[clamp(2.6rem,11vw,6.5rem)] font-semibold leading-[1.02] tracking-tight xl:mt-20 xl:leading-[1.1]">
         {headingWords.map((word, index) => (
-          <span key={word.text} className="mr-3 inline-block overflow-hidden align-bottom">
+          <span key={word.text} className="mx-1 inline-block overflow-visible align-bottom sm:mx-1.5">
             <motion.span
               initial={{ opacity: 0, y: 40, filter: 'blur(12px)' }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
@@ -82,7 +80,7 @@ export default function WebDevelopmentHero() {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.62 }}
-        className="relative z-10 mt-8 max-w-2xl text-center text-base leading-relaxed text-white/60 sm:text-lg"
+        className="relative z-10 mt-6 max-w-2xl text-center text-sm leading-relaxed text-white/60 sm:mt-8 sm:text-lg"
       >
         Modern, fast, responsive websites built to strengthen your digital presence
         and turn visitors into meaningful opportunities.
@@ -92,7 +90,7 @@ export default function WebDevelopmentHero() {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.78 }}
-        className="relative z-10 mt-10 flex flex-col items-center gap-4 sm:flex-row"
+        className="relative z-10 mt-8 flex w-full max-w-sm flex-col items-stretch gap-3 sm:mt-10 sm:w-auto sm:max-w-none sm:flex-row sm:items-center sm:gap-4"
       >
         <motion.button
           type="button"
@@ -100,7 +98,7 @@ export default function WebDevelopmentHero() {
           whileTap={{ scale: 0.97 }}
           data-cursor="button"
           onClick={goToContact}
-          className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-brand-accent to-brand-orange px-7 py-3.5 text-sm font-semibold text-white"
+          className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-brand-accent to-brand-orange px-7 py-3.5 text-sm font-semibold text-white"
           style={{ boxShadow: '0 0 30px -6px rgba(249,115,22,0.55)' }}
         >
           <span className="relative z-10">Get a Free Quote</span>
@@ -125,6 +123,8 @@ export default function WebDevelopmentHero() {
           View Our Services
         </motion.button>
       </motion.div>
+      <ServiceOutlineText text="WEB DEVELOPMENT" scaleX={0.72} />
+
     </section>
   );
 }

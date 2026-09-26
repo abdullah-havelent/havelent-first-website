@@ -65,18 +65,20 @@ export default function ServiceOutlineText({
     <div
       aria-hidden="true"
       className="
-        pointer-events-none
-        absolute
-        inset-x-0
-        bottom-0
-        z-[20]
+        service-outline-shell
+        relative
+        z-[3]
+        mt-10
         hidden
-        h-[420px]
+        min-h-[220px]
+        w-full
+        flex-none
         items-end
         justify-center
         overflow-hidden
         select-none
-        md:flex
+        xl:flex
+        2xl:min-h-[280px]
       "
     >
       {/* Invisible measurement only */}
@@ -109,7 +111,7 @@ export default function ServiceOutlineText({
         }}
         animate={{
           opacity: 1,
-          y:50,
+          y: 24,
           filter: 'blur(0px)',
         }}
         transition={{

@@ -35,16 +35,11 @@ export default function Hero() {
     <section
       id="home"
       onMouseMove={onMouseMove}
-      className="relative flex min-h-[88vh] w-full flex-col items-center justify-start overflow-hidden px-6 pt-32 pb-8"
+      className="relative flex min-h-[100svh] w-full flex-col items-center justify-center overflow-hidden px-5 pb-16 pt-28 sm:px-6 sm:pb-20 sm:pt-32 xl:min-h-[88vh] xl:justify-start xl:pb-8"
     >
 
       {/* Outline Text */}
-      <ServiceOutlineText
-        text="DIGITAL MARKETING"
-        scaleX={0.67}
-      />
-
-      {/* Background grid */}
+{/* Background grid */}
       <div className="bg-grid pointer-events-none absolute inset-0 opacity-[0.08]" />
 
       {/* Floating orange circles */}
@@ -68,11 +63,11 @@ export default function Hero() {
       <div className="pointer-events-none absolute bottom-0 left-0 h-40 w-full bg-gradient-to-b from-transparent via-black/30 to-black" />
 
       {/* Heading */}
-      <h1 className="mt-20 font-display text-center text-[clamp(2.75rem,7vw,6.5rem)] font-semibold leading-[1.2] tracking-tight">
+      <h1 className="relative z-10 max-w-6xl font-display text-center text-[clamp(2.6rem,11vw,6.5rem)] font-semibold leading-[1.02] tracking-tight xl:mt-20 xl:leading-[1.2]">
         {headingWords.map((word, i) => (
           <span
             key={i}
-            className="mr-3 inline-block overflow-hidden align-bottom"
+            className="mx-1 inline-block overflow-visible align-bottom sm:mx-1.5"
           >
             <motion.span
               initial={{
@@ -116,7 +111,7 @@ export default function Hero() {
           duration: 0.8,
           delay: 0.3 + headingWords.length * 0.1,
         }}
-        className="mt-8 max-w-xl text-center text-base leading-relaxed text-white/60 sm:text-lg"
+        className="relative z-10 mt-6 max-w-xl text-center text-sm leading-relaxed text-white/60 sm:mt-8 sm:text-lg"
       >
         We deliver data-driven digital marketing services that attract the right audience,
         generate quality leads, strengthen your online presence, and turn marketing campaigns into measurable business growth.
@@ -136,7 +131,7 @@ export default function Hero() {
           duration: 0.8,
           delay: 0.9,
         }}
-        className="mt-10 flex flex-col items-center gap-4 sm:flex-row"
+        className="relative z-10 mt-8 flex w-full max-w-sm flex-col items-stretch gap-3 sm:mt-10 sm:w-auto sm:max-w-none sm:flex-row sm:items-center sm:gap-4"
       >
 
         {/* Get a Free Quote */}
@@ -160,7 +155,7 @@ export default function Hero() {
                 });
             }, 500);
           }}
-          className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-brand-accent to-brand-orange px-7 py-3.5 text-sm font-semibold text-white"
+          className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-brand-accent to-brand-orange px-7 py-3.5 text-sm font-semibold text-white"
           style={{
             boxShadow: '0 0 30px -6px rgba(249,115,22,0.55)',
           }}
@@ -209,6 +204,11 @@ export default function Hero() {
         </motion.button>
 
       </motion.div>
+      <ServiceOutlineText
+        text="DIGITAL MARKETING"
+        scaleX={0.67}
+      />
+
     </section>
   );
 }

@@ -186,10 +186,27 @@ const scrollToSection = (
 
     setOpenGroup(null);
 
-    element.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
+    if (sectionId === 'home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      const navbar = document.querySelector<HTMLElement>('[data-site-navbar]');
+      const navbarBottom = navbar?.getBoundingClientRect().bottom ?? 88;
+      const sectionPaddingTop = Number.parseFloat(
+        window.getComputedStyle(element).paddingTop,
+      ) || 0;
+      const contentGap = window.innerWidth < 768 ? 16 : 24;
+      const targetTop =
+        element.getBoundingClientRect().top +
+        window.scrollY +
+        sectionPaddingTop -
+        navbarBottom -
+        contentGap;
+
+      window.scrollTo({
+        top: Math.max(0, targetTop),
+        behavior: 'smooth',
+      });
+    }
 
     if (sectionId === 'home') {
       window.history.replaceState(
@@ -1171,12 +1188,14 @@ const scrollToSection = (
             className="
               fixed
               inset-0
-              z-[100]
+              z-[260]
               flex
               items-center
               justify-center
+              overflow-y-auto
               bg-black/70
               px-6
+              py-5
               backdrop-blur-md
             "
             onClick={() =>
@@ -1207,6 +1226,7 @@ const scrollToSection = (
               }
               className="
                 relative
+                my-auto
                 w-full
                 max-w-lg
                 overflow-hidden

@@ -104,7 +104,7 @@ export default function BrandContactPopup() {
           animate={{ opacity: 1 }}
           exit={shouldAnimate ? { opacity: 0 } : undefined}
           transition={{ duration: 0.28 }}
-          className="fixed inset-0 z-[110] flex items-center justify-center overflow-y-auto bg-black/75 px-4 py-5 backdrop-blur-md sm:px-6"
+          className="fixed inset-0 z-[260] flex items-center justify-center overflow-y-auto bg-black/75 px-4 py-5 backdrop-blur-md sm:px-6"
           onClick={() => setOpen(false)}
         >
           <motion.div

@@ -25,7 +25,7 @@ export default function WebDevelopmentProcess() {
       {/* DESKTOP */}
       {/* ================================================= */}
 
-              <div className="absolute right-6 top-8 z-50 md:right-10 md:top-10">
+              <div className="absolute right-6 top-8 z-50 md:right-10 md:top-10 lg:left-1/2 lg:right-auto lg:-translate-x-1/2">
           <button
             type="button"
             onClick={() => setLightsOn((previous) => !previous)}
@@ -39,6 +39,10 @@ export default function WebDevelopmentProcess() {
               px-4
               py-2.5
               text-[10px]
+              lg:gap-4
+              lg:px-6
+              lg:py-3
+              lg:text-xs
               font-medium
               uppercase
               tracking-[0.22em]
@@ -58,6 +62,8 @@ export default function WebDevelopmentProcess() {
                 relative
                 h-2
                 w-2
+                lg:h-2.5
+                lg:w-2.5
                 rounded-full
                 transition-all
                 duration-300
