@@ -4,6 +4,11 @@ import { useEffect, useState } from "react";
 import LoadingScreen from "./LoadingScreen";
 import Navbar from "./Navbar";
 import CursorGlow from "./CursorGlow";
+import SecretAccessGate from "./SecretAccessGate";
+import BirthdayNavbar from "./BirthdayNavbar";
+import BirthdayCakeCursor from "./BirthdayCakeCursor";
+import { usePathname } from "next/navigation";
+import { PRIVATE_VAULT_PATH } from "@/lib/privateVaultPath";
 
 
 
@@ -13,6 +18,7 @@ export default function ClientRoot({
   children: React.ReactNode;
 }) {
   const [ready, setReady] = useState(false);
+  const pathname = usePathname();
 
 
 
@@ -73,8 +79,17 @@ export default function ClientRoot({
 
       {ready && (
         <>
-          <CursorGlow />
-          <Navbar />
+          {pathname === PRIVATE_VAULT_PATH ? (
+            <BirthdayCakeCursor />
+          ) : (
+            <CursorGlow />
+          )}
+          {pathname === PRIVATE_VAULT_PATH ? (
+            <BirthdayNavbar />
+          ) : (
+            <Navbar />
+          )}
+          <SecretAccessGate />
           {children}
         </>
       )}
